@@ -1,0 +1,65 @@
+'RFR3'				! CHARACTER(len=4)              :: nom du dossier des données et des sorties
+'RK4F'				! CHARACTER(len=4) 	    	:: nom integrateur (RK4 / RK4F)
+100.				! REAL				:: frequence (kHz)
+18				! INTEGER			:: nombre de rayons
+400000				! INTEGER			:: nombre d'iteration
+cart				! CHARACTER(len=4)		:: système de coord. de la position initiale
+m                               ! CHARACTER(len=2)              :: unite de longueur utilise (M,KM,RS)			
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+0., 0. 0.			! REAL, DIMENSION(3)		:: position initiale (m)
+1.000000, 0.000000, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
+0.996195, 0.087155, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 5°
+0.984808, 0.173648, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 10°
+0.965926, 0.258819, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 15°
+0.939693, 0.342020, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 20°
+0.906308, 0.422618, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 25°
+0.866025, 0.50, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 30°
+0.819152, 0.573577, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 35°
+0.766044, 0.642788, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 40°
+0.707107, 0.707107, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 45°
+0.642788, 0.766044, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 50°
+0.573576, 0.819152, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 55°
+0.50    , 0.866025, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 60°
+0.422618, 0.906308, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 65°
+0.342020, 0.939693, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 70°
+0.258819, 0.965926, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 75°
+0.173648, 0.984808, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 80°
+0.087155, 0.996195, 0.		! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 85°
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
+5.				! REAL				:: indice max
+1.d-3				! REAL				:: dt initial
+1.d-3				! REAL				:: dt max
+1.d-3				! REAL				:: dt min

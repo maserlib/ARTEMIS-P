@@ -1,0 +1,7 @@
+0.				! REAL 				:: B0 en Gauss
+6378.				! REAL				:: y0b (km) echelle caracteristique de B
+100.				! REAL				:: Ne1 (cm-3)
+5.				! REAL 				:: Ne2 (cm-3)
+10.				! REAL				:: x0 (m)
+0.01				! REAL				:: a (m)	
+
