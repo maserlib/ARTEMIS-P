@@ -1,8 +1,15 @@
 #Makefile
 
-F90 = ifort
-OPT = -implicitnone -i8 -r8 -prec-div -prec-sqrt -fast -O5
-OPTD= -implicitnone -i8 -r8 -warn all -check all -fPIC -fpe0 -g -debug extended -traceback
+F90 = gfortran
+OPT = -O2 -fimplicit-none -fdefault-integer-8 -fdefault-double-8 -fdefault-real-8
+OPTD = -g -Wall -Wtabs -Wunderflow -fimplicit-none -Wconversion -fdefault-integer-8 -fdefault-real-8 -fdefault-double-8 -Wuninitialized -Wextra -Wredundant-decls
+MAIN = raytracing_5.0_gfortran
+
+#F90 = ifort
+#OPT = -implicitnone -i8 -r8 -prec-div -prec-sqrt -fast -O5
+#OPTD= -implicitnone -i8 -r8 -warn all -check all -fPIC -fpe0 -g -debug extended -traceback
+#MAIN = raytracing_5.0_ifortran
+
 #-O2 -fimplicit-none -fdefault-integer-8 -fdefault-double-8 -fdefault-real-8
 # -g :debug
 # -O2 -fimplicit-none -fdefault-integer-8 -fdefault-double-8 -fdefault-real-8 :compilation optimale 
@@ -39,12 +46,12 @@ module: #*.a
 #	ar -r biblio.a *.o
 
 program:
-	$(F90) -c $(OPT) raytracing_5.0.f90
-	$(F90) -o raytracing raytracing_5.0.o *.o #biblio.a
+	$(F90) -c $(OPT) $(MAIN).f90
+	$(F90) -o raytracing $(MAIN).o *.o #biblio.a
 
 programD:
-	$(F90) -c $(OPTD) raytracing_5.0.f90
-	$(F90) -o raytracing raytracing_5.0.o *.o #biblio.a
+	$(F90) -c $(OPTD) $(MAIN) 
+	$(F90) -o raytracing $(MAIN).o *.o #biblio.a
 
 # -L chemin -lbiblio  si la bibliotheque n'est pas ds le meme dossier
 clean:
