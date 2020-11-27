@@ -47,11 +47,11 @@ module: #*.a
 
 program:
 	$(F90) -c $(OPT) $(MAIN).f90
-	$(F90) -o raytracing $(MAIN).o *.o #biblio.a
+	$(F90) -o raytracing *.o #biblio.a
 
 programD:
-	$(F90) -c $(OPTD) $(MAIN) 
-	$(F90) -o raytracing $(MAIN).o *.o #biblio.a
+	$(F90) -c $(OPTD) $(MAIN).f90 
+	$(F90) -o raytracing *.o #biblio.a
 
 # -L chemin -lbiblio  si la bibliotheque n'est pas ds le meme dossier
 clean:
