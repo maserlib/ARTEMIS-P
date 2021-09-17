@@ -41,7 +41,8 @@ PROGRAM raytracing
 	write(*,*) '----------------------------------'
 	!FICHIER ECRITURE TEST
 	!ecriture fichier
-	inquire(directory=trim('../'//path), exist=is_existing)
+    inquire(file=trim('../'//path), exist=is_existing) !SYNTAXE POUR GFORTRAN
+    !inquire(directory=trim('../'//path), exist=is_existing) !SYNTAXE POUR IFORT
 	if (.not.is_existing) then
 		write(*,*) is_existing, 'fichier existe pas'
 		call system("mkdir "//'../'//path)
@@ -90,7 +91,7 @@ PROGRAM raytracing
 	!vecteur indice de rayon
 	forall(i=1:Nray) numray(i) = i
 	
-	!Système de coordonnées initial
+	!SystÔøΩme de coordonnÔøΩes initial
 	read(21,*) sysco
 	write(*,*) 'SYSTEME DE COORD.:  ', sysco
 	
@@ -168,7 +169,7 @@ PROGRAM raytracing
 	!initialisation arbitraire de LP='VP'
 	LP(:)='VP'	
 	
-	!calcul de certains paramètres initaux
+	!calcul de certains paramÔøΩtres initaux
 	call density(r, Nel)
 	call vphase(mu,vp)
 	call thetakb(k,r,thkb)
@@ -308,7 +309,7 @@ PROGRAM raytracing
 		
 			
 		
-		!Selection des paramètres des rayons qui continuent	
+		!Selection des paramÔøΩtres des rayons qui continuent	
 		mask = kiter(numray) .lt. Niter
 		Nray3 = count(mask)
 
@@ -318,7 +319,7 @@ PROGRAM raytracing
 		j = 1
 		do i=1,Nray2
 			if (mask(i)) then
-				!écriture dans le fichier
+				!ÔøΩcriture dans le fichier
 				write(21+numray(i),9991), r_1(:,i),k_1(:,i),mu_1(i),dt_1(i),&
 					& vg(i), vp(i), thkb(i)*180.d0/pi, thrb(i)*180.d0/pi,&
 					& dist(numray(i)), B(:,i), &
