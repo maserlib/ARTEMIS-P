@@ -27,7 +27,7 @@ moduleD: #*.a
 	ar -r biblio.a *.o
 
 
-module: *.a	
+module: #*.a	
 
 	$(F90) -c $(OPT) constantes.f90
 	$(F90) -c $(OPT) coord.f90	
