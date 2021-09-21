@@ -253,7 +253,6 @@ subroutine polar_ratio(mode,f,k,V,LP, pratio,pratio_1)
 	real(kind=8), dimension(size(V,2))   :: sinth4, sinth2,costh2, nmode
 	real(kind=8), dimension(3,size(V,2)) :: Y
 	integer								 :: i
-	
 		call varplasma(V,f,X,Y)
 		normY = sqrt(Y(1,:)**2+Y(2,:)**2+Y(3,:)**2)
 		call index(X,Y,k,mode,mu)
