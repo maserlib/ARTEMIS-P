@@ -21,6 +21,23 @@ subroutine magneticf(V,B)
 
 end subroutine magneticf
 
+
+subroutine read_environ()
+        !----------------------------------------------------
+        ! Lit le fichier init_environ.txt et range les donnees
+        !  dans un fichier
+        !----------------------------------------------------
+        use constantes
+
+        open(40,file='init_environ.txt')
+        read(40,*)n0
+        read(40,*)z0
+        close(40)
+        write (*,*)"n0 ",n0," z0 ",z0
+
+
+end subroutine read_environ
+
 subroutine density(V,Ne)
 	!-----------------------------------------------------
 	! Calcul de la densite d'electron
@@ -28,20 +45,21 @@ subroutine density(V,Ne)
 	! INPUTS:   V: vecteur position en coordonnées cart.
 	! OUTPUTS: Ne: densite d'electron en cm-3 
 	!-----------------------------------------------------
-	real(kind=8),dimension(:,:),intent(in)    :: V
+        use constantes
+        real(kind=8),dimension(:,:),intent(in)    :: V
 	real(kind=8), dimension(:), intent(out)   :: Ne
 
 
 
-	real(kind=8)                              :: n0,z0
+!	real(kind=8)                              :: n0,z0
 
-	open(40, file='init_environ.txt')
-	read(40,*) n0
-	read(40,*) z0
+!	open(40, file='init_environ.txt')
+!	read(40,*) n0
+!	read(40,*) z0
 
 	Ne(:)=n0*(V(3,:)/z0)**(-3)
 	
-	close(40)
+!	close(40)
 
 
 

@@ -13,5 +13,5 @@ MODULE constantes
 	real(kind=8), parameter :: RSol = 6.960d5      !km
 	complex(kind=8), parameter :: ic = cmplx(0.0,1.0) 
 
-
+        real(kind=8) :: z0,n0
 END MODULE constantes
