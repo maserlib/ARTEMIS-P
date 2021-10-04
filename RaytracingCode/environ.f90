@@ -17,7 +17,7 @@ subroutine magneticf(V,B)
 
 	B(1,:)=0. 
 	B(2,:)=0.
-	B(3,:)=0.
+	B(3,:)=B0*(V(3,:)/z0B)**(-3)
 
 end subroutine magneticf
 
@@ -32,8 +32,10 @@ subroutine read_environ()
         open(40,file='init_environ.txt')
         read(40,*)n0
         read(40,*)z0
+        read(40,*)B0
+        read(40,*)z0B
         close(40)
-        write (*,*)"n0 ",n0," z0 ",z0
+        write (*,*)"n0 ",n0," z0 ",z0," B0 ",B0," z0B ",z0B
 
 
 end subroutine read_environ
@@ -57,7 +59,7 @@ subroutine density(V,Ne)
 !	read(40,*) n0
 !	read(40,*) z0
 
-	Ne(:)=n0*(V(3,:)/z0)**(-3)
+	Ne(:)=n0*8.0*(V(3,:)/z0)**(-2)
 	
 !	close(40)
 
