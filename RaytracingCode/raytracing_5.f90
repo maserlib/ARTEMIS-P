@@ -31,7 +31,7 @@ PROGRAM raytracing
 	call cpu_time(t1)
 
 
-
+        call read_environ()
 ! INITIALISATION (fichier init_raytracing.txt')
 	open(21, file='init_raytracing.txt')
 	
