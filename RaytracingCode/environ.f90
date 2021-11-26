@@ -59,7 +59,7 @@ subroutine density(V,Ne)
 !	read(40,*) n0
 !	read(40,*) z0
 
-	Ne(:)=n0*8.0*(V(3,:)/z0)**(-2)
+	Ne(:)=n0*(V(3,:)/z0)**(-2)
 	
 !	close(40)
 
