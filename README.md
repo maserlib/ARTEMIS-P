@@ -6,8 +6,8 @@ A short description of the code is available in the [Proceedings of the 2013 URS
 
 ## Requirement
 ### Compilation
-In the main branch, the code is compiled with [Intel Fortran Compiler](https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html#gs.i844d1).  
-Please beware that in the other branches, the code is compiled with [GNU Fortran Compiler](https://gcc.gnu.org/wiki/GFortranBinaries).
+The default compiler is [GNU Fortran Compiler](https://gcc.gnu.org/wiki/GFortranBinaries).  
+It is also possible to compile with [Intel Fortran Compiler](https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html#gs.i844d1).
 
 ## How to run
 ### input files
