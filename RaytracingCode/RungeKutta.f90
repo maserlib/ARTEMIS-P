@@ -7,17 +7,17 @@ MODULE RungeKutta
 
 	subroutine RK4(x,y,dt,dxdt,dydt,param1,param2,x_1,y_1)
 		!-----------------------------------------------------------------
-		! Methode de Runge Kutta d'ordre 4 couplée
+		! Runge‚ÄìKutta fourth-order method
 		! CALLING SEQUENCE : RK4(x,y,dt,dxdt,dydt,param1,x_1,y_1)
-		! INPUTS:     x: vecteur de dim 3*Nray
-		!             y: vecteur de dim 3*Nray
-		!            dt: pas d'integration
-		!          dxdt: fonction donnant la derivee de x
-		!          dydt: fonction donnant la derivee de y
-		!        param1: paramètre --> f
-		!		 param2: paramètre --> mode ('X' ou 'O' ou 'V')
-		! OUTPUTS:  x_1: vecteur de dim 3*Nray au pas n+1
-		!           y_1: vecteur de dim 3*Nray au pas n+1
+		! INPUTS:     x: 3*Nray dimension vector
+		!             y: 3*Nray dimension vector
+		!            dt: integration time step
+		!          dxdt: the derivative of x
+		!          dydt: the derivative of y
+		!        param1: parameter --> f
+		!		 param2: parameter --> mode ('X' ou 'O' ou 'V')
+		! OUTPUTS:  x_1: 3*Nray dimension vector at n+1 step
+		!           y_1: 3*Nray dimension vector at n+1 step
 		!-----------------------------------------------------------------
 	implicit none
 	real(kind=8), dimension(:,:), intent(in)  :: x,y
@@ -63,7 +63,7 @@ MODULE RungeKutta
 	call dydt(x+dx3,y+dy3,param1,param2,dy4dt,size(dt)) !drdt
 	forall (i=1:3) dy4(i,:)=dt(:)*dy4dt(i,:)!*sqrt((1.d0-Xp)/(dx4dt(1,:)**2+dx4dt(2,:)**2+dx4dt(3,:)**2))
 
-	!changement de signe des dérivées dans Haselgrove_63 nécessaire pour avoir les bonnes équations sans B
+	!change of sign of derivatives in Haselgrove_63 needed to get the right equations without B
 	where (param2 .eq. 'X')
 		nmode =-1.d0
 	else where
