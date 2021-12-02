@@ -15,7 +15,7 @@ MODULE RungeKutta
 		!          dxdt: the derivative of x
 		!          dydt: the derivative of y
 		!        param1: parameter --> f
-		!		 param2: parameter --> mode ('X' ou 'O' ou 'V')
+		!	 param2: parameter --> mode ('X' ou 'O' ou 'V')
 		! OUTPUTS:  x_1: 3*Nray dimension vector at n+1 step
 		!           y_1: 3*Nray dimension vector at n+1 step
 		!-----------------------------------------------------------------
