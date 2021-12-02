@@ -7,11 +7,11 @@ MODULE coord
 
 subroutine cart_sph(x,r)
 	!----------------------------------------------------------
-	! Passage des coord. cartésiennes aux coord. sphériques 
+	! Switching from cartesian to spherical coordinates
 	! CALLING SEQUENCE: call cart_sph(x,r)
-	! INPUT:  x: vecteur position en coordonnées cart.
-	! OUTPUT: r: vecteur position en coordonnées sph. 
-	!				(rayon,longitude,latitude)			!
+	! INPUT:  x: position vector in cartesian coordinates
+	! OUTPUT: r: position vector in spherical coordinates 
+	!            (radial distance,azimuthal angle,polar angle)			!
 	!----------------------------------------------------------
 
 	real(kind=8), dimension(:,:), intent(in)  :: x
@@ -30,7 +30,7 @@ subroutine cart_sph(x,r)
 		r(2,:) = pi/2.d0
 	end where
 	
-	!latitude
+	!colatitude
 	where (r(1,:) .ne. 0.d0)
 		r(3,:) = pi/2.d0 - acos(x(3,:)/r(1,:))
 	elsewhere
@@ -41,11 +41,11 @@ end subroutine cart_sph
 
 subroutine cart_cyl(x,r)
 	!----------------------------------------------------------
-	! Passage des coord. cartésiennes aux coord. cylindriques
+	! Switching from cartesian to cylindrical coordinates
 	! CALLING SEQUENCE: call cart_cyl(x,r)
-	! INPUT:  x: vecteur position en coordonnées cart.
-	! OUTPUT: r: vecteur position en coordonnées cyl. 
-	!				(rayon,angle,altitude)			!
+	! INPUT:  x: position vector in cartesian coordinates
+	! OUTPUT: r: position vector in cylindrical coordinates 
+	!	     (radial distance,angular coordinate,altitude)			!
 	!----------------------------------------------------------
 
 	real(kind=8), dimension(:,:), intent(in)  :: x
@@ -54,10 +54,10 @@ subroutine cart_cyl(x,r)
 	! altitude
 	r(3,:)=x(3,:)
 
-	! rayon
+	! radial distance
 	r(1,:) = sqrt(x(1,:)**2+x(2,:)**2)
 	
-	! angle polaire
+	! angular coordinate
 	where (x(1,:) .ge. 0.d0 .and. x(2,:) .ne. 0.d0)
 		r(2,:) = asin(x(2,:)/r(1,:)) 
 	end where 
@@ -73,11 +73,11 @@ end subroutine cart_cyl
 
 subroutine sph_cart(r,x)
 	!----------------------------------------------------------
-	! Passage des coord. sphériques aux coord. cartésiennes 
+	! Switching from spherical to cartesian coordinates 
 	! CALLING SEQUENCE: call cart_sph(r,x)
-	! INPUT:  r: vecteur position en coordonnées sph.
-	!				(rayon,longitude,latitude)	
-	! OUTPUT: x: vecteur position en coordonnées cart. 
+	! INPUT:  r: position vector in spherical coordinates
+	!	     (radial distance,azimuthal angle,polar angle)	
+	! OUTPUT: x: position vector in cartesian coordinates 
 	!----------------------------------------------------------
 
 	real(kind=8), dimension(:,:), intent(in)  :: r
@@ -91,11 +91,11 @@ end subroutine sph_cart
 
 subroutine cyl_cart(r,x)
 	!----------------------------------------------------------
-	! Passage des coord. sphériques aux coord. cartésiennes 
+	! Switching from cylindrical to cartesian coordinates
 	! CALLING SEQUENCE: call cyl_cart(r,x)
-	! INPUT:  r: vecteur position en coordonnées sph.
-	!				(rayon,angle,altitude)	
-	! OUTPUT: x: vecteur position en coordonnées cart. 
+	! INPUT:  r: position vector in cylindrical coordinates 
+	!	     (radial distance,angular coordinate,altitude)
+	! OUTPUT: x: position vector in cartesian coordinates 
 	!----------------------------------------------------------
 
 	real(kind=8), dimension(:,:), intent(in)  :: r
@@ -109,12 +109,13 @@ end subroutine cyl_cart
 
 subroutine sph_cart_vect(Vr,r,Vx)
 	!-------------------------------------------------------------------------------------
-	! Passage des coord. sphériques aux coord. cartésiennes pour un vecteur en un point r
+	! Switching from spherical to cartesian coordinates for a vector at a point r
 	! CALLING SEQUENCE: call sph_cart_vect(Vr,r,Vx)
-	! INPUT:  r : vecteur position en coord. sph. (rayon,longitude,latitude)	
-	!		  Vr: vecteur en coordonnées sph. (Vrayon,Vlongitude,Vlatitude)	
-	!				
-	! OUTPUT: Vx: vecteur en coordonnées cart. (Vx,Vy,Vz)
+	! INPUT: Vr : vector in spherical coordinates
+	!	     (radial distance,azimuthal angle,polar angle)	
+	!         r : position vector in spherical coordinates
+	!	     (radial distance,azimuthal angle,polar angle)
+	! OUTPUT: Vx: vector in cartesian coordinates  (Vx,Vy,Vz)
 	!-------------------------------------------------------------------------------------
 
 	real(kind=8), dimension(:,:), intent(in)  :: r,Vr
@@ -127,12 +128,14 @@ subroutine sph_cart_vect(Vr,r,Vx)
 end subroutine sph_cart_vect
 subroutine cyl_cart_vect(Vr,r,Vx)
 	!-------------------------------------------------------------------------------------
-	! Passage des coord. sphériques aux coord. cartésiennes pour un vecteur en un point r
+	! Switching from cylindrical to cartesian coordinates for a vector at a point r
 	! CALLING SEQUENCE: call cyl_cart_vect(Vr,r,Vx)
-	! INPUT:  r : vecteur position en coord. cyl. (rayon,angle,altitude)	
-	!		  Vr: vecteur en coordonnées sph. (Vrayon,Vangle,Valtitude)	
+	! INPUT: Vr : vector in cylindrical coordinates
+	!             (radial distance,angular coordinate,altitude)
+	!         r : position vector in cylindrical coordinates
+	!             (radial distance,angular coordinate,altitude)
 	!				
-	! OUTPUT: Vx: vecteur en coordonnées cart. (Vx,Vy,Vz)
+	! OUTPUT: Vx: vector in cartesian coordinates  (Vx,Vy,Vz)
 	!-------------------------------------------------------------------------------------
 
 	real(kind=8), dimension(:,:), intent(in)  :: r,Vr
@@ -145,12 +148,12 @@ subroutine cyl_cart_vect(Vr,r,Vx)
 end subroutine cyl_cart_vect
 subroutine rot(Vin,theta,Vout)
 	!------------------------------------------------------
-	! Rotation du vecteur Vin d'un angle theta
+	! Rotation of the Vin vector by an angle theta
 	! CALLING SEQUENCE: call rot(Vin,theta,Vout)
-	! INPUT:  Vin: vecteur initial en coord. cart.	
-	!		  theta: angle en degre
+	! INPUT:  Vin: vector in cartesian coordinates
+	!       theta: angle in degre
 	!				
-	! OUTPUT: Vout: vecteur modifié en coordonnées cart.
+	! OUTPUT: Vout: modified vector in cartesian coordinates.
 	!------------------------------------------------------
 	real(kind=8), dimension(:,:), intent(in)  :: Vin
 	real(kind=8), dimension(:), intent(in)    :: theta
