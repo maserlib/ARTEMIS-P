@@ -31,7 +31,7 @@ PROGRAM raytracing
 	call cpu_time(t1)
 
 
-
+        call read_environ()
 ! INITIALISATION (fichier init_raytracing.txt')
 	open(21, file='init_raytracing.txt')
 	
@@ -41,7 +41,8 @@ PROGRAM raytracing
 	write(*,*) '----------------------------------'
 	!FICHIER ECRITURE TEST
 	!ecriture fichier
-	inquire(directory=trim('../'//path), exist=is_existing)
+    inquire(file=trim('../'//path), exist=is_existing) !SYNTAXE POUR GFORTRAN
+    !inquire(directory=trim('../'//path), exist=is_existing) !SYNTAXE POUR IFORT
 	if (.not.is_existing) then
 		write(*,*) is_existing, 'fichier existe pas'
 		call system("mkdir "//'../'//path)
@@ -90,7 +91,7 @@ PROGRAM raytracing
 	!vecteur indice de rayon
 	forall(i=1:Nray) numray(i) = i
 	
-	!Système de coordonnées initial
+	!SystÔøΩme de coordonnÔøΩes initial
 	read(21,*) sysco
 	write(*,*) 'SYSTEME DE COORD.:  ', sysco
 	
@@ -168,14 +169,14 @@ PROGRAM raytracing
 	!initialisation arbitraire de LP='VP'
 	LP(:)='VP'	
 	
-	!calcul de certains paramètres initaux
+	!calcul de certains paramÔøΩtres initaux
 	call density(r, Nel)
 	call vphase(mu,vp)
 	call thetakb(k,r,thkb)
 	call fplasma(f,X,fp)
 	call fcyclo(f,Y,fc)
 	call fuph(f,X,Y,fuh)
-	call polar_ratio(mode, f,k,r,Lp,pratio,pratio_1)
+	call polar_ratio(mode, f,k,r,LP,pratio,pratio_1)
 	
 	!ECRITURE FICHIER VISU
 	open(18, file='../'//path//'/visu_param.txt')
@@ -202,19 +203,18 @@ PROGRAM raytracing
 		write(filen(18:20),'(i2.2)') i
 		filen(20:24) = '.dat'
 		open(21+i,file=filen, form='formatted')
-		write(21+i,"(A300)") 'x (km)    y(km)    z (km)    kx    ky    kz    indice    pas    vg (c)    vp (c)  &
-			&  (k.B) (deg)    (r.B) (deg)    distance (km)    Bx (T)    By (T)    Bz (T)  &
-			&  fp (Hz)    fc (Hz)    fUH (Hz)    Ne (cm-3)   &
-			&  Re(Ey/Ex)    Im(Ey/Ex)    Re(Ez/Ex)    Im(Ez/Ex)    Re(Ez/Ey)    Im(Ez/Ey)     mode      LP      err      errdisp  '
+		write(21+i,'(30(a,1x))') 'x (km)','y (km)','z (km)','kx','ky','kz','indice','pas','vg (c)','vp (c)', &
+			&  '(k.B) (deg)','(r.B) (deg)','distance (km)','Bx (T)','By (T)','Bz (T)', &
+			&  'fp (Hz)','fc (Hz)','fUH (Hz)','Ne (cm-3)',   &
+			&  'Re(Ey/Ex)','Im(Ey/Ex)','Re(Ez/Ex)','(Ez/Ex)','Re(Ez/Ey)','Im(Ez/Ey)','mode','LP','err','errdisp'
 
-	write(21+i,9991), r(:,i),k(:,i),mu(i),dt(i), -1.d0,vp(i), thkb(i)*180.d0/pi, -1.d0, &
+	write(21+i,9991) r(:,i),k(:,i),mu(i),dt(i), -1.d0,vp(i), thkb(i)*180.d0/pi, -1.d0, &
 			& 0.d0, B(:,i), fp(i), fc(i), fuh(i),Nel(i),&
 			& real(pratio_1(1,i)), aimag(pratio_1(1,i)),&
 			& real(pratio_1(2,i)), aimag(pratio_1(2,i)),&
 			& real(pratio_1(3,i)), aimag(pratio_1(3,i)),&
-			& mode(i), LP(i)
+			& mode(i), LP(i),0.0,0.0
 	enddo
-
 	!initialisation kiter
 	kiter(:) = 1.d0
 
@@ -308,7 +308,7 @@ PROGRAM raytracing
 		
 			
 		
-		!Selection des paramètres des rayons qui continuent	
+		!Selection des paramÔøΩtres des rayons qui continuent	
 		mask = kiter(numray) .lt. Niter
 		Nray3 = count(mask)
 
@@ -318,8 +318,8 @@ PROGRAM raytracing
 		j = 1
 		do i=1,Nray2
 			if (mask(i)) then
-				!écriture dans le fichier
-				write(21+numray(i),9991), r_1(:,i),k_1(:,i),mu_1(i),dt_1(i),&
+				!ÔøΩcriture dans le fichier
+				write(21+numray(i),9991) r_1(:,i),k_1(:,i),mu_1(i),dt_1(i),&
 					& vg(i), vp(i), thkb(i)*180.d0/pi, thrb(i)*180.d0/pi,&
 					& dist(numray(i)), B(:,i), &
 					& fp(i), fc(i), fuh(i),Nel(i),&
@@ -356,6 +356,7 @@ PROGRAM raytracing
 		allocate(thkb(Nray3),thkr(Nray3),thrb(Nray3),mask(Nray3), flagmu(Nray3), flagnan(Nray3),flagerr(Nray3),flagerrdisp(Nray3))
 		allocate(fp(Nray3), fc(Nray3),fuh(Nray3), Nel(Nray3), mode_1(Nray3), mux_1(Nray3), muo_1(Nray3), dmux(Nray3),dmuo(Nray3))
 		allocate(modeX(Nray3),modeO(Nray3), dr(Nray3))
+                LP(:)='VP'
 	end do
 	
 	call cpu_time(t2)
