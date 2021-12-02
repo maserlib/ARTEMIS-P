@@ -7,10 +7,10 @@ MODULE environ
 
 subroutine magneticf(V,B)
 	!----------------------------------------------------------
-	! Calcul du champ magnetique
+	! Magnetic field computation.
 	! CALLING SEQUENCE: call magneticf(V,B)
-	! INPUTS:  V: vecteur position en coordonnées cart.
-	! OUTPUTS: B: vecteur champ magnetique en coord cart. en T
+	! INPUTS:  V: position vector in cartesian coordinates
+	! OUTPUTS: B: magnetic field vector in cartesian coordinate (Tesla)
 	!----------------------------------------------------------
 	real(kind=8), dimension(:,:),intent(in)  :: V
 	real(kind=8), dimension(:,:),intent(out) :: B
@@ -42,10 +42,10 @@ end subroutine read_environ
 
 subroutine density(V,Ne)
 	!-----------------------------------------------------
-	! Calcul de la densite d'electron
+	! Electron density computation
 	! CALLING SEQUENCE: call density(V,Ne)
-	! INPUTS:   V: vecteur position en coordonnées cart.
-	! OUTPUTS: Ne: densite d'electron en cm-3 
+	! INPUTS:   V: position vector in cartesian coordinates
+	! OUTPUTS: Ne: electron density (cm-3)
 	!-----------------------------------------------------
         use constantes
         real(kind=8),dimension(:,:),intent(in)    :: V

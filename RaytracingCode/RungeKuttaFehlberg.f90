@@ -5,18 +5,18 @@ MODULE RungeKuttaFehlberg
 	contains
 	subroutine RK4F(x,y,dt,dxdt,dydt,param1,param2,dtmin,dtmax,x_1,y_1)
 		!-----------------------------------------------------------------
-		! Methode de Runge Kutta de Fehlberg d'ordre 4 couplée
+		! Runge‚ÄìKutta-Fehlberg fourth-order method
 		! (Coleman 2008 radio science bulletin)
 		! CALLING SEQUENCE : RK4F(x,y,dt,dxdt,dydt,param1,param2,x_1,y_1)
-		! INPUTS:     x: vecteur de dim 3*Nray
-		!             y: vecteur de dim 3*Nray
-		!            dt: pas d'integration
-		!          dxdt: fonction donnant la derivee de x
-		!          dydt: fonction donnant la derivee de y
-		!        param1: paramètre --> f
-		!		 param2: paramètre --> mode ('X' ou 'O' ou 'V')
-		! OUTPUTS:  x_1: vecteur de dim 3*Nray au pas n+1
-		!           y_1: vecteur de dim 3*Nray au pas n+1
+		! INPUTS:     x: 3*Nray dimension vector
+		!             y: 3*Nray dimension vector
+		!            dt: integration time step
+		!          dxdt: the derivative of x
+		!          dydt: the derivative of y
+		!        param1: parameter --> f
+		!	 param2: parameter --> mode ('X' ou 'O' ou 'V')
+		! OUTPUTS:  x_1: 3*Nray dimension vector at n+1 step
+		!           y_1: 3*Nray dimension vector at n+1 step
 		!-----------------------------------------------------------------
 	implicit none
 	real(kind=8), dimension(:,:), intent(in)  :: x,y
@@ -90,7 +90,7 @@ MODULE RungeKuttaFehlberg
 		& y-8.d0*dy1/27.d0+2.d0*dy2-3544.d0*dy3/2565.d0+1859.d0*dy4/4104.d0-11.d0*dy5/40.d0,param1,param2,dy6dt,size(dt)) !drdt
 	forall (i=1:3) dy6(i,:)=dt*dy6dt(i,:)*sqrt((1.d0-Xp)/(dx6dt(1,:)**2+dx6dt(2,:)**2+dx6dt(3,:)**2))
 	
-	!adaptation du pas
+	!step adaptation
 	a1 = (16./135-25./216.) ; a2 = (6656./12825.-1408./2565.) ; a3 = (28561./56430.-2197./4104.); a4 = (-9./50.+1./5.) ; a5 = 2./55.
 	dx = a1*dx1+a2*dx3+a3*dx4+a4*dx5+a5*dx6
 	dy = a1*dy1+a2*dy3+a3*dy4+a4*dy5+a5*dy6
@@ -128,24 +128,12 @@ MODULE RungeKuttaFehlberg
 
 	else
 		again = 0
-	endif	
-	!if (again == 1) then 
-	!	write(*,*) maxval(err), tol, again
-	!	write(*,*) minval(dt)
-	!else
-	!	write(*,*) 'OUT'
-	!endif
-	
+	endif		
 	end do
 
-!	where (dt < dtmin)
-!		dt = dtmin
-!	end where
-!	where (dt > dtmax)
-!		dt = dtmax
-!	end where
+
 	
-	!changement de signe des dérivées dans Haselgrove_63 nécessaire pour avoir les bonnes équations sans B
+	!change of sign of derivatives in Haselgrove_63 needed to get the right equations without B
 	where (param2 .eq. 'X')
 		nmode =-1.d0
 	else where
