@@ -10,11 +10,11 @@ MODULE params_raytracing
 	
 subroutine thetakB(k,V,thkB)
 	!-----------------------------------------------------
-	! Calcul de l'angle entre k et B
+	! (k,B) angle computation
 	! CALLING SEQUENCE: call thetakB(k,V,thkB)
-	! INPUTS:     k: vecteur d'onde en coord. cart.
-	!		      V: vecteur position en coord. cart.
-	! OUTPUTS: thkB: angle entre k et B en radian 
+	! INPUTS:     k: wave vector in cartesian coordinates.
+	!             V: position vector in cartesian coordinates.
+	! OUTPUTS: thkB: (k,B) angle in radian 
 	!-----------------------------------------------------
 	real(kind=8), dimension(:,:),intent(in) :: k,V
 	real(kind=8), dimension(:),intent(out)  :: thkB
@@ -35,11 +35,11 @@ end subroutine thetakB
 
 subroutine thetarB(V,Vap,thrB)
 	!-----------------------------------------------------
-	! Calcul de l'angle entre le rayon et B
+	! (r,B) angle computation
 	! CALLING SEQUENCE: call thetarB(k,V,thrB)
-	! INPUTS:     k: vecteur d'onde en coord. cart.
-	!		      V: vecteur position en coord. cart.
-	! OUTPUTS: thrB: angle entre le rayon et B en radian 
+	! INPUTS:   Vap: vector in cartesian coordinates.
+	!             V: position vector in cartesian coordinates.
+	! OUTPUTS: thrB: (r,B) angle in radian  
 	!-----------------------------------------------------
 	real(kind=8), dimension(:,:),intent(in) :: V,Vap
 	real(kind=8), dimension(:),intent(out)  :: thrB
@@ -60,13 +60,13 @@ end subroutine thetarB
 
 subroutine thetakr(k,V,Y,Vap,thkr)
 	!-----------------------------------------------------
-	! Calcul de l'angle entre k et le rayon
+	! (k,r) angle computation
 	! CALLING SEQUENCE: call thetakr(k,V,Vap,thkr)
-	! INPUTS:     k: vecteur d'onde en coord. cart.
-	!             V: vecteur position en n en coord. cart.
-	!             Y: vecteur "magnétique"
-	!	    Vap: vecteur position en n+1 en coord. cart.
-	! OUTPUTS: thkr: angle entre k et le rayon en radian 
+	! INPUTS:     k: wave vector in cartesian coordinates.
+	!             V: position vector in cartesian coordinates at step n.
+	!             Y: magnetic vector
+	!           Vap: position vector in cartesian coordinates at step n+1
+	! OUTPUTS: thkr: (k,r) angle in radian  
 	!-----------------------------------------------------
 	real(kind=8), dimension(:,:),intent(in) :: k,V,Vap,Y
 	real(kind=8), dimension(:),intent(out)  :: thkr
@@ -89,27 +89,27 @@ end subroutine thetakr
 
 subroutine vgroup(V,k,f,thkr,mode,vg)
 	!-----------------------------------------------------
-	! Calcul de la vitesse de groupe Budden p.140
+	! Group velocity calculation (Budden p.140)
 	!      vg = 1/(n'*cos(alpha))
-	! 			n' = d(f*n)df
-	!			alpha = angle (k,ray)
+	!      n' = d(f*n)df
+	!   alpha = angle (k,ray)
 	! CALLING SEQUENCE: call vgroup(V,k,f,thkr,mode,vg)
-	! INPUTS:     V: vecteur position en coord.cart.
-	!			  k: vecteur d'onde en coord. cart.
-	!			  f: frŽquence de l'onde
-	!			  mode: mode de porpagation
-	!			  thkr: angle (k,rayon)
-	! OUTPUTS: 	  vg: vitesse de groupe
+	! INPUTS:     V: position vector in cartesian coordinates
+	!             k: wave vector in cartesian coordinates.
+	!             f: wave frequency
+	!          mode: propagation mode
+	!          thkr: (k,r) angle
+	! OUTPUTS:   vg: group velocity
 	!-----------------------------------------------------
 	real(kind=8), dimension(:,:), intent(in)	:: V,k
 	real(kind=8), dimension(:), intent(in)		:: thkr
-	real(kind=8), intent(in) 					:: f
-	character(len=1), intent(in), dimension(:)  :: mode	
+	real(kind=8), intent(in) 			:: f
+	character(len=1), intent(in), dimension(:)      :: mode	
 	real(kind=8), dimension(:), intent(out)		:: vg
 	
 	real(kind=8), dimension(3,size(V,2)) 		:: Y, Yav, Yap
-	real(kind=8), dimension(size(V,2))			:: X,Xav,Xap,mu, muav, muap,muprime
-	real(kind=8)								:: df
+	real(kind=8), dimension(size(V,2))		:: X,Xav,Xap,mu, muav, muap,muprime
+	real(kind=8)					:: df
 	
 	df=1.d0 !Hz
 
@@ -130,11 +130,11 @@ end subroutine vgroup
 
 subroutine vphase(mu,vp)
 	!-----------------------------------------------------
-	! Calcul de la vitesse de phase
+	! Phase velocity calculation
 	!      vp = c/mu 
-	! CALLING SEQUENCE: call vgroup(mu,vp)
+	! CALLING SEQUENCE: call vphase(mu,vp)
 	! INPUTS:     mu: indice
-	! OUTPUTS: 	  vp: vitesse de phase
+	! OUTPUTS:    vp: phase velocity
 	!-----------------------------------------------------
 	real(kind=8), dimension(:), intent(in) 	:: mu
 	real(kind=8), dimension(:), intent(out) :: vp
@@ -145,13 +145,13 @@ end subroutine vphase
 
 subroutine distance(V,Vav,dist,numray)
 	!-----------------------------------------------------
-	! Calcul de la distance parcourue par le rayon depuis son pt de dŽpart
+	! Calculation of the distance travelled by the ray from its starting point
 	!
 	! CALLING SEQUENCE: call distance(d,V,dist)
-	! INPUTS:     d: distance au pas d'avant
-	!             V: vecteur position en coord. cart en position n
-	!			  Vav: vecteur position en coord. cart en position n-1
-	! OUTPUTS: 	  dist: distance
+	! INPUTS:     d: distance at the last step
+	!             V: position vector in cartesian coordinates at step n
+	!           Vav: position vector in cartesian coordinates at step n-1
+	! OUTPUTS: dist: distance
 	!-----------------------------------------------------
 	real(kind=8), dimension(:,:), intent(in) :: V, Vav
 	integer(kind=8), dimension(:), intent(in)   :: numray
@@ -164,12 +164,12 @@ end subroutine distance
 
 subroutine fplasma(f,X,fp)
 	!-----------------------------------------------------
-	! Calcul de la frŽquence plasma fp = f*sqrt(X)
+	! Plasma frequency computation fp = f*sqrt(X)
 	!
 	! CALLING SEQUENCE: call fplasma(f,X,fp)
-	! INPUTS:     f: frŽquence de l'onde
+	! INPUTS:     f: wave frequency
 	!             X: (fp/f)^2
-	! OUTPUTS: 	  fp: frequence plasma 
+	! OUTPUTS:   fp: plasma  frequency
 	!-----------------------------------------------------
 	real(kind=8), intent(in)  				:: f
 	real(kind=8), dimension(:), intent(in)  :: X
@@ -181,12 +181,12 @@ end subroutine fplasma
 
 subroutine fcyclo(f,Y,fc)
 	!-----------------------------------------------------
-	! Calcul de la frŽquence cyclotron fc = f*norm(Y)
+	! Cyclotron frequency calculation fc = f*norm(Y)
 	!
 	! CALLING SEQUENCE: call fcyclo(f,X,fp)
-	! INPUTS:     f: frŽquence de l'onde
+	! INPUTS:     f: wave frequency
 	!             Y: fc/f
-	! OUTPUTS: 	  fc: frequence plasma 
+	! OUTPUTS:   fc: Cyclotron frequency
 	!-----------------------------------------------------
 	real(kind=8), intent(in)  				:: f
 	real(kind=8), dimension(:,:), intent(in):: Y
@@ -198,13 +198,13 @@ end subroutine fcyclo
 
 subroutine fuph(f,X,Y,fuh)
 	!-----------------------------------------------------
-	! Calcul de la frŽquence uper hybride fuh = sqrt(fp^2+fc^2)
+	! Upper hybrid frequency calculation fuh = sqrt(fp^2+fc^2)
 	!
 	! CALLING SEQUENCE: call fuh(f,X,Y,fuh)
-	! INPUTS:     f: frŽquence de l'onde
+	! INPUTS:     f: wave frequency
 	!             X: (fp/f)^2
 	!             Y: fc/f
-	! OUTPUTS: 	  fc: frequence plasma 
+	! OUTPUTS:  fuh: upper hybrid frequency
 	!-----------------------------------------------------
 	real(kind=8), intent(in)  				:: f
 	real(kind=8), dimension(:), intent(in)  :: X
@@ -222,25 +222,25 @@ end subroutine fuph
 
 subroutine polar_ratio(mode,f,k,V,LP, pratio,pratio_1)
 	!-----------------------------------------------------
-	! Calcul du ratio axial de polarisation: (Quemada)
-	!	repre: (x',y',z') avec z' // k et B ds (x',z')
+	! Axial polarisation ratio calculation: (Quemada)
+	!       system: (x',y',z') with z' // k and B in (x',z')
 	!
-	!	S = 1-X(1-Y^2) ; D = XY/(1-Y^2) ; P = 1-X
+	!       S = 1-X(1-Y^2) ; D = XY/(1-Y^2) ; P = 1-X
 	!
-	!	p = Ey'/Ex' = iPcos(th)(n^2-S)/D(n^2sin^2(th)-P)
-	!	q = Ez'/Ex' = -(n^2-P)sin(th)/Pcos(th)(n^2-S)
-	!	r = Ez'/Ey' = q/p
+	!       p = Ey'/Ex' = iPcos(th)(n^2-S)/D(n^2sin^2(th)-P)
+	!       q = Ez'/Ex' = -(n^2-P)sin(th)/Pcos(th)(n^2-S)
+	!       r = Ez'/Ey' = q/p
 	!
-	!	ATTENTION: BUDDEN Y=eB/mf avec e=-1.6e-19C donc \Theta_Budden = angle(k,Y) = pi - angle(k,B)
+	!       WARNING: BUDDEN Y=eB/mf avec e=-1.6e-19C donc \Theta_Budden = angle(k,Y) = pi - angle(k,B)
 	!
 	! CALLING SEQUENCE: call polar_ratio(mode,f,k,V,pratio)
-	! INPUTS:     mode: mode de propagation ('X', 'O' ou 'V')
-	!			  f: frŽquence de l'onde
-	!             k: vecteur d'onde en coord. cart.
-	!		      V: vecteur position en coord. cart.
-	!		 pratio: rapport de polarisation ˆ l'etape n
-	!			 LP: vecteur limitong polarization ('VP' -> variable polar, 'LP' -> limiting polar
-	! OUTPUTS: 	  pratio_1: p,q,r (dim 3*Nray)
+	! INPUTS:      mode: propagation mode ('X', 'O' ou 'V')
+	!                 f: wave frequency
+	!                 k: wave vector in cartesian coordinates.
+	!                 V: position vector in cartesian coordinates
+	!            pratio: polarisation ration at step n
+	!                LP: limiting polarisation vector ('VP' -> polar variable, 'LP' -> limiting polar
+	! OUTPUTS: pratio_1: p,q,r (dim 3*Nray)
 	!-----------------------------------------------------
 	character(len=1), intent(in),dimension(:)		:: mode
 	real(kind=8), intent(in)  				 		:: f
@@ -268,7 +268,7 @@ subroutine polar_ratio(mode,f,k,V,LP, pratio,pratio_1)
 		P = 1-X
 		
 		where (LP .eq. 'VP')	
-			where (normY /= 0.d0) ! clcul de polarisation
+			where (normY /= 0.d0) ! polarisation calculation
         			!p = Ey'/Ex'
         			pratio_1(1,:) = -ic*(D*(mu**2*sin(th)**2-P))/(P*cos(th)*(mu**2-S))
 		
@@ -283,7 +283,7 @@ subroutine polar_ratio(mode,f,k,V,LP, pratio,pratio_1)
 				pratio_1(2,:) = 0.d0
 				pratio_1(3,:) = 0.d0
 			end where
-			!DL autour de th=90¡ en mode O
+			!DL around de th=90 in mode O
 			!-------------------------------
 
 			!	where (mode .ne. 'X' .and. ((th .gt. pi/2.-0.0174533) .and. (th .lt. pi/2.+0.0174533)))
@@ -306,10 +306,10 @@ end subroutine polar_ratio
 
 subroutine limiting_polar(f,V,k,V_1,k_1,dr,unit,LP)
 	!-----------------------------------
-	! Drapeau de limiting polarization
-	! si abs(mux-muo) < c/2pif*dmux/dr ou c/2pif*dmux/dr alors la polarisation est figŽe
+	! Limiting polarization flag
+	! if abs(mux-muo) < c/2pif*dmux/dr ou c/2pif*dmux/dr then the polarization is fixed
 	!
-	! ATTENTION AUX CHOIX DE DR ET AUX UNITES DE V (m,km,Rs,...)
+	! WARNING WITH THE CHOICE OF DR AND WITH UNITS OF V (m,km,Rs,...)
 	!-----------------------------------
 	real(kind=8), intent(in)  				 		:: f !en Hz
 	real(kind=8), dimension(:,:), intent(in)  		:: V,k,V_1,k_1
@@ -341,24 +341,24 @@ subroutine limiting_polar(f,V,k,V_1,k_1,dr,unit,LP)
 		convunit = 1.d0
 	endif
 	
-	!calcul de mux et muo en (r_n, k_n)
+	! mux and muo calculation in (r_n, k_n)
 	call varplasma(V,f,X,Y)
 	call index(X,Y,k,modeX,muX)
 	call index(X,Y,k,modeO,muO)
 
-	!calcul de mux et muo en (r_n+1,k_n+1)
+	! mux et muo calculation in (r_n+1,k_n+1)
 	call varplasma(V_1,f,X,Y)
 	call index(X,Y,k_1,modeX,muX_1)
 	call index(X,Y,k_1,modeO,muO_1)
 
-	!dmu = c/(2pif)*(mu1-mu)/dr !ATTENTION AUX UNITES
+	!dmu = c/(2pif)*(mu1-mu)/dr !WARNING WITH UNITS
 	dmux = c/(2.d0*pi*f)*abs(muX_1-muX)/(dr*convunit)
 	dmuo = c/(2.d0*pi*f)*abs(muO_1-muO)/(dr*convunit)
 
-	!calcul de muo_1-mux_1
+	!muo_1-mux_1 calculation
 	dmuxo = abs(muo_1-mux_1)	
 		
-	!Limiting polarization qd (muo-mux) < dmuo OU dmux < 1%
+	!Limiting polarization when (muo-mux) < dmuo or dmux < 1%
 	where((abs(dmuxo) .le. dmux) .or. (abs(dmuxo) .le. dmuo))
 		LP(:) ='LP' !limiting polarization
 	else where
@@ -376,13 +376,12 @@ end subroutine limiting_polar
 
 subroutine errordisp(k,V,X,Y,mu,errdisp)
 	!---------------------------------
-	! calcul de l'erreur k^2-1-X*(pY-1)
-	! 	d'aprs Haselgrove (1960)
+	! error calculation k^2-1-X*(pY-1) (Haselgrove (1960))
 	! CALLING SEQUENCE: call error(k,X,Y, err)
-	! INPUTS : V: vect position en coord. cart.
-	!          k: vect d'onde en coord. cart.
-	!		   f: frequence en Hz
-	! OUTPUTS: err: scalaire = 0
+	! INPUTS : V: position vector in cartesian coordinates
+	!          k: wave vector in cartesian coordinates.
+	!          f: wave frequency
+	! OUTPUTS: err: scalar = 0
 	!------------------------------------
 	real(kind=8), dimension(:,:), intent(in)  :: Y,k,V
 	real(kind=8), dimension(:), intent(in)    :: X,mu
@@ -392,7 +391,7 @@ subroutine errordisp(k,V,X,Y,mu,errdisp)
 	normY = sqrt(Y(1,:)**2+Y(2,:)**2+Y(3,:)**2)
 	!normk2 = k(1,:)**2+k(2,:)**2+k(3,:)**2
 	!call index(X,Y,k,mode,mu)
-			!si B=0 (Y=0) alors direction de Y = verticale (vdotk ne pas tre nul)
+			!si B=0 (Y=0) alors direction de Y = verticale (vdotk ne pas Âtre nul)
 	!where (normY .eq. 0.d0)  
 !		vdotk(:) = maxval(k(:,:))
 !	elsewhere
