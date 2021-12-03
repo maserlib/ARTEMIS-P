@@ -8,12 +8,13 @@ MODULE subs_raytracing
 
 subroutine varplasma(V,f,X,Y)
 	!------------------------------------
-	! Calcul les variables X et Y du plasma
+	! Calculate the variables X and Y from the Appleton-Hartree 
+	! equation [Haselgrove (1963)]
 	! CALLING SEQUENCE: call varplasma(V,f)
-	! INPUTS : V: vect position en coord. cart.
-	!		   f: frequence en Hz
+	! INPUTS : V: position vector in cartesian coordinates.
+	!          f: frequency (Hz)
 	! OUTPUTS: X: (fp/f)^2
-	!	  	   Y: fc/f
+	!          Y: fc/f
 	!------------------------------------
 	real(kind=8), dimension(:,:), intent(in)  :: V 
 	real(kind=8), intent(in)                  :: f 
@@ -32,13 +33,13 @@ end subroutine varplasma
 
 subroutine index(X,Y,k,mode,mu)
 	!------------------------------------
-	! calcul l'indice de refraction mu dans un plasma magnetise
-	! d'apres la formule d'Appleton-Hartree donnee dans
-	!    [Haselgrove, 1960]
+	! Calculation of the mu refractive index in a magnetised
+	! plasma according to the Appleton-Hartree equation
+	! [Haselgrove, 1960]
 	! CALLING SEQUENCE: call index(X,Y,th,mu)
 	! INPUTS: X: (fp/f)^2
-	!		  Y: fc/f
-	!		 th: angle entre k et B
+	!         Y: fc/f
+	!        th: (k,B) angle
 	! OUTPUTS: mu
 	!------------------------------------
 	real(kind=8), dimension(:), intent(in)     	 :: X
@@ -69,7 +70,7 @@ subroutine index(X,Y,k,mode,mu)
 	
 	B2mAC = B**2-A*C
 	
-	!Qd champ magnŽtqiue -> 0 alors B2mAC doit -> 0 => ARTEFACTS NUMERIQUES => qd abs(B2mAC) < 1.d-15 => B2mAC=0
+	! When magnetic field -> 0 then B2mAC -> 0 => NUMERICAL EFFECTS => when abs(B2mAC) < 1.d-15 => B2mAC=0
 	where (abs(B2mAC) < 1.d-15)
 		B2mAC = 0.d0
 	end where
@@ -77,19 +78,18 @@ subroutine index(X,Y,k,mode,mu)
 	mu = sqrt((-B+nmode*sqrt(B2mAC))/A)
 	
 	
-	!	write(*,*) B2mAC, -B+sqrt(B2mAC), mu
+	!write(*,*) B2mAC, -B+sqrt(B2mAC), mu
 	
 end subroutine index
 
 subroutine calcp(X,Y,k,mode,p)
 	!------------------------------------
-	! calcul la variable p solution de
-	!	a*p^2+2b*p+c*=0
-	! d'Haselgrove (1963) 
+	! Compute p solution of a*p^2+2b*p+c*=0
+	! [Haselgrove (1963)]
 	! CALLING SEQUENCE: call calcp(X,Y,k,p)
 	! INPUTS: X: (fp/f)^2
-	!		  Y: fc/f
-	!		  k: vecteur d'onde en coord. cart.
+	!         Y: fc/f
+	!         k: wave vector in cartesian coordinates.
 	! OUTPUTS: p [Haselgrove,63]
 	!------------------------------------
 	real(kind=8), dimension(:,:), intent(in)   :: Y,k 
@@ -99,7 +99,7 @@ subroutine calcp(X,Y,k,mode,p)
 	real(kind=8), dimension(size(p))           :: normY, vdotk,alpha,beta,gamma,nmode
 	
 	!------------------------------------------
-	!	mode O +/- mode X
+	!mode O +/- mode X
 	!p = (-beta +/- sqrt(beta**2-alpha*gamma))/alpha
 
 	
@@ -134,8 +134,8 @@ subroutine varpartiel(X,Y,k,mode,A,B,C,D)
 	! d'Haselgrove (1963) decrivant les d_partielles
 	! CALLING SEQUENCE: call varpartiel(X,Y,k,A,B,C,D)
 	! INPUTS: X: (fp/f)^2
-	!		  Y: fc/f
-	!		  k: vecteur d'onde en coord. cart.
+	!         Y: fc/f
+	!         k: wave vector in cartesian coordinates.
 	! OUTPUTS: A == J* [Haselgrove,63]
 	!          B == K* [Haselgrove,63]
 	!          C == L* [Haselgrove,63]
@@ -154,7 +154,7 @@ subroutine varpartiel(X,Y,k,mode,A,B,C,D)
 	else where
 		nmode = 1.d0
 	end where
-		!si B=0 (Y=0) alors direction de Y = verticale (vdotk ne pas tre nul)
+	!if B=0 (Y=0) then Y direction = vertical (vdotk not null)
 	where (normY .eq. 0.d0)  
 		vdotk(:) = maxval(k(:,:))
 	elsewhere
@@ -188,22 +188,21 @@ end subroutine varpartiel
 
 subroutine dxdt(V,k,f,mode,dx_dt,nray)
 	!------------------------------------
-	! calcul de dxidt = J*ki-K*Yi
-	! 	d'aprs Haselgrove (1960)
+	! Compute dxidt = J*ki-K*Yi [Haselgrove (1960)]
 	! CALLING SEQUENCE: call dxdt(V,k,f,dx_dt)
-	! INPUTS : V: vect position en coord. cart.
-	!          k: vect d'onde en coord. cart.
-	!		   f: frequence en Hz
-	! OUTPUTS: dx_dt : tableau de 3*Nray dim.
+	! INPUTS : V: position vector in cartesian coordinates.
+	!          k: wave vector in cartesian coordinates.
+	!          f: frequency (Hz)
+	! OUTPUTS: dx_dt : 3*Nray dimension array
 	!------------------------------------
-	integer, intent(in)							 :: nray
+	integer, intent(in)                          :: nray
 	real(kind=8), dimension(3,nray), intent(in)  :: V,k
 	real(kind=8), intent(in)                     :: f
-	character(len=1), intent(in), dimension(nray)   :: mode	
+	character(len=1), intent(in), dimension(nray):: mode	
 	real(kind=8), dimension(3,nray), intent(out) :: dx_dt
 	real(kind=8), dimension(3,nray)              :: Y
 	real(kind=8), dimension(nray)                :: X, A,B,C,D
-	integer									     :: i
+	integer	                                     :: i
 	
 	call varplasma(V,f,X,Y)
 	call varpartiel(X,Y,k,mode,A,B,C,D)
@@ -218,13 +217,13 @@ end subroutine dxdt
 
 subroutine dkdt(V,k,f,mode,dk_dt,nray)
 	!------------------------------------
-	! calcul de dkidt = L*dX/dxi+sumj((K*kj+M*Yj)*dYj/dxi)
-	! 	d'aprs Haselgrove (1960)
+	! Compute dkidt = L*dX/dxi+sumj((K*kj+M*Yj)*dYj/dxi)
+	! [Haselgrove (1960)]
 	! CALLING SEQUENCE: call dkdt(V,k,f,dk_dt)
-	! INPUTS : V: vect position en coord. cart.
-	!          k: vect d'onde en coord. cart.
-	!		   f: frequence en Hz
-	! OUTPUTS: dk_dt: tableau de 3 dim. 
+	! INPUTS : V: position vector in cartesian coordinates.
+	!          k: wave vector in cartesian coordinates.
+	!          f: frequency (Hz)
+	! OUTPUTS: dk_dt: 3*Nray dimension array
 	!------------------------------------
 	integer, intent(in)							 :: nray
 	real(kind=8), dimension(3,nray), intent(in)  :: V,k
@@ -259,13 +258,13 @@ end subroutine dkdt
 
 subroutine error(k,X,Y,mode,err)
 	!---------------------------------
-	! calcul de l'erreur k^2-1-X*(pY-1)
-	! 	d'aprs Haselgrove (1960)
+	! compute the error k^2-1-X*(pY-1)
+	! [Haselgrove (1960)]
 	! CALLING SEQUENCE: call error(k,X,Y, err)
-	! INPUTS : V: vect position en coord. cart.
-	!          k: vect d'onde en coord. cart.
-	!		   f: frequence en Hz
-	! OUTPUTS: err: scalaire = 0
+	! INPUTS : V: position vector in cartesian coordinates.
+	!          k: wave vector in cartesian coordinates.
+	!          f: frequency en Hz
+	! OUTPUTS: err: scalar = 0
 	!------------------------------------
 	real(kind=8), dimension(:,:), intent(in)  :: Y,k
 	real(kind=8), dimension(:), intent(in)    :: X
