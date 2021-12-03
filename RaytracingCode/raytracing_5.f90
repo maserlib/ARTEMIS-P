@@ -11,31 +11,31 @@ PROGRAM raytracing
 	implicit none
 	
 	!DECLARATIONS
-	integer(kind=8)                           	 :: Niter
-	real(kind=8), dimension(:,:), allocatable 	 :: r,k,r_1,k_1,B,Y,r0
+	integer(kind=8)                              :: Niter
+	real(kind=8), dimension(:,:), allocatable    :: r,k,r_1,k_1,B,Y,r0
 	complex(kind=8), dimension(:,:), allocatable :: pratio,pratio_1
-	logical, dimension(:), allocatable	  	  	 :: mask
-	real(kind=8), dimension(:), allocatable	  	 :: kiter,dt,dt_1,mu,mu_1,X,normk,err,errdisp,vp,thkb, thkr, thrb, dr
-	real(kind=8), dimension(:), allocatable	  	 :: vg, dist, fp, fc, fuh, Nel, normB, mux, muo, dmux, dmuo, mux_1, muo_1
-	integer(kind=8),dimension(:),allocatable  	 :: numray, numraytemp, flagmu, flagnan,flagerr, flagerrdisp
-	real(kind=8)                              	 :: f,t1,t2, mumax, dtinit,dtmax,dtmin
-	integer(kind=8)					          	 :: Nray,Nray2,Nray3 ,i ,j
-	character(len=1), dimension(:), allocatable	 :: mode, mode_1, modeX, modeO
-	character(len=2), dimension(:), allocatable	 :: LP
-	character(len=4)				          	 :: integ, path, sysco
+	logical, dimension(:), allocatable           :: mask
+	real(kind=8), dimension(:), allocatable	     :: kiter,dt,dt_1,mu,mu_1,X,normk,err,errdisp,vp,thkb, thkr, thrb, dr
+	real(kind=8), dimension(:), allocatable	     :: vg, dist, fp, fc, fuh, Nel, normB, mux, muo, dmux, dmuo, mux_1, muo_1
+	integer(kind=8),dimension(:),allocatable     :: numray, numraytemp, flagmu, flagnan,flagerr, flagerrdisp
+	real(kind=8)                                 :: f,t1,t2, mumax, dtinit,dtmax,dtmin
+	integer(kind=8)	                             :: Nray,Nray2,Nray3 ,i ,j
+	character(len=1), dimension(:), allocatable  :: mode, mode_1, modeX, modeO
+	character(len=2), dimension(:), allocatable  :: LP
+	character(len=4)                             :: integ, path, sysco
 	character(len=2)                             :: unit
-	character(len=1)							 :: erase
-	character(len=24)				          	 :: filen
-	logical									  	 :: is_existing
+	character(len=1)                             :: erase
+	character(len=24)                            :: filen
+	logical	                                     :: is_existing
 
 	call cpu_time(t1)
 
 
         call read_environ()
-! INITIALISATION (fichier init_raytracing.txt')
+! INITIALISATION (file init_raytracing.txt')
 	open(21, file='init_raytracing.txt')
 	
-	!Nom du dossier
+	! results directory name
 	read(21,*) path
 	write(*,*) 'MODELE:', path
 	write(*,*) '----------------------------------'
@@ -44,7 +44,7 @@ PROGRAM raytracing
     inquire(file=trim('../'//path), exist=is_existing) !SYNTAXE POUR GFORTRAN
     !inquire(directory=trim('../'//path), exist=is_existing) !SYNTAXE POUR IFORT
 	if (.not.is_existing) then
-		write(*,*) is_existing, 'fichier existe pas'
+		write(*,*) is_existing, 'file don t exist'
 		call system("mkdir "//'../'//path)
 		open(19,file='../'//path//'/test_limitingpolar.txt')
 	else
@@ -59,27 +59,27 @@ PROGRAM raytracing
 		end if
 	end if
 		
-	!Choix de l'integrateur
+	! integrator choice
 	read(21,*) integ
-	write(*,*) 'INTGEGRATEUR ', integ	
+	write(*,*) 'INTGEGRATOR ', integ	
 	
-	!initialisation frequence (kHz-->Hz)
+	! frequency initialisation (kHz-->Hz)
 	read(21,*) f
 	f = f*1.d3
-	write(*,*) 'frequence', f, ' Hz'
+	write(*,*) 'frequency', f, ' Hz'
 	
-	!Nombre de rayons
+	!Number of rays
 	read(21,*) Nray
-	write(*,*) 'Nombre de rayons:', Nray
+	write(*,*) 'Number of rays:', Nray
 	Nray2=Nray
 	
-	!Nombre d'iteration
+	!Numbre of iterations
 	read(21,*) Niter
 	write(*,*) 'Niter ',Niter
 	write(*,*) '----------------------------------'
 	
 	!---------------------------------------------------------------------------
-	!ALLOCATION MEMOIRE
+	! MEMORY ALLOCATION
 	
 	allocate(r(3,Nray),r0(3,Nray),r_1(3,Nray),k(3,Nray),k_1(3,Nray),B(3,Nray),Y(3,Nray),vg(Nray),pratio(3,Nray),pratio_1(3,Nray))
 	allocate(X(Nray),thkb(Nray),mu(Nray),mu_1(Nray),normk(Nray),dt(Nray),dt_1(Nray), mode(Nray), mode_1(Nray))
@@ -88,18 +88,18 @@ PROGRAM raytracing
 	allocate(fp(Nray), fc(Nray), fuh(Nray), Nel(Nray), normB(Nray))
 	allocate(mux(Nray),muo(Nray), dmux(Nray),dmuo(Nray),mux_1(Nray),muo_1(Nray),modeX(Nray),modeO(Nray), dr(Nray), LP(Nray))
 	!---------------------------------------------------------------------------
-	!vecteur indice de rayon
+	! index vector for rays
 	forall(i=1:Nray) numray(i) = i
 	
-	!Syst�me de coordonn�es initial
+	! initial coordinate system
 	read(21,*) sysco
-	write(*,*) 'SYSTEME DE COORD.:  ', sysco
+	write(*,*) 'COORDINATE SYSTEM : ', sysco
 	
-	!Unite de longueur
+	! length unit
 	read(21,*) unit
-	write(*,*) 'UNITE DE LONGUEUR: ', unit
+	write(*,*) ' LENGTH UNIT : ', unit
 	
-	!initialisation position
+	! position initialisation
 	do i=1,Nray 
 		read(21,*) r0(:,i)
 	enddo
@@ -114,23 +114,23 @@ PROGRAM raytracing
 		write(*,*) r(:,1)		
 	endif
 	
-	!initialisation distance
+	! distance initialisation 
 	dist(:) = 0.d0
 	
-	!initialistaion vecteur d'onde
+	! wave vector initialistaion
 	do i=1,Nray 
 		read(21,*) k(:,i)
 	enddo
 	write(*,*) 'k', k
 
-	!Choix du mode
+	! propagation mode
 	do i=1,Nray
 		read(21,*) mode(i)
 	enddo
 	write(*,*) 'MODE ',mode(1)
 
 
-	!initialisation indice
+	! refractive index initialisation
 	call varplasma(r,f,X,Y)
 	write(*,*) 'X',X(1)
 	write(*,*) 'Y',Y(:,1)
@@ -145,20 +145,20 @@ PROGRAM raytracing
 	read(21,*) mumax
 	write(*,*) 'mu max', mumax
 	
-	!normalisation de k par normk = mu
+	!normalisation of k by normk = mu
 	normk = sqrt(k(1,:)**2+k(2,:)**2+k(3,:)**2)
 	forall (i=1:3) k(i,:) = (k(i,:)/normk(:))*mu(:)
 	write(*,*) 'k normalise', k
 
 	
-	!initialisation du pas de temps
+	! time step initialisation
 	read(21,*) dtinit
 	read(21,*) dtmax
 	read(21,*) dtmin	
 	write(*,*) 'dt init', dtinit, 'dt max', dtmax, 'dt min', dtmin
 	dt(:)=dtinit
 	
-	!initialisation arbitraire de pratio en polar circulaire
+	! arbitrary initialisation of pratio in circular polar
 	where (mode .eq. 'X')
 		pratio(1,:) = -ic
 	elsewhere
@@ -166,10 +166,10 @@ PROGRAM raytracing
 	end where
 	pratio(2,:) = 0.d0
 	pratio(3,:) = 0.d0
-	!initialisation arbitraire de LP='VP'
+	! arbitrary initialisation LP='VP'
 	LP(:)='VP'	
 	
-	!calcul de certains param�tres initaux
+	! compute some initial parameters
 	call density(r, Nel)
 	call vphase(mu,vp)
 	call thetakb(k,r,thkb)
@@ -178,7 +178,7 @@ PROGRAM raytracing
 	call fuph(f,X,Y,fuh)
 	call polar_ratio(mode, f,k,r,LP,pratio,pratio_1)
 	
-	!ECRITURE FICHIER VISU
+	!WRITING IN VISU FILE
 	open(18, file='../'//path//'/visu_param.txt')
 		write(18,"(A4)") path
 		write(18,"(I3.1)") Nray
@@ -191,7 +191,7 @@ PROGRAM raytracing
 		enddo
 	close(18)	
 
-!SAUVEGARDE DES PARAMETRES D'INITIALISATION
+	!SAVE INITIAL PARAMETERS
 	
 	if (integ .eq. 'RK4T') then
 		filen='../'//path//'/dataRK4T_' 
@@ -218,7 +218,7 @@ PROGRAM raytracing
 	!initialisation kiter
 	kiter(:) = 1.d0
 
-	!BOUCLE
+	!LOOP
 
 	do while (sum(kiter) .ne. Nray*Niter*1.d0)
 		if (integ .eq. 'RK4T') then
@@ -229,14 +229,14 @@ PROGRAM raytracing
 
 		call varplasma(r_1,f,X,Y)
 		call index(X,Y,k_1,mode,mu_1)
-		!renormalisation de k a mu
+		!renormalisation of k by mu
 		normk = sqrt(k_1(1,:)**2+k_1(2,:)**2+k_1(3,:)**2)
 		forall (i=1:3) k_1(i,:) = (k_1(i,:)/normk(:))*mu_1(:)
 		
-		!calcul de dr=sqrt(r_1^2-r^2)
+		! dr=sqrt(r_1^2-r^2)
 		dr(:)=sqrt(r_1(1,:)**2+r_1(2,:)**2+r_1(3,:)**2)-sqrt(r(1,:)**2+r(2,:)**2+r(3,:)**2)
 		
-		!Calcul des parametres
+		!Compute parameters
 		call density(r_1,Nel)
 		call vphase(mu_1,vp)
 		call thetakb(k_1,r_1,thkb)
@@ -252,7 +252,7 @@ PROGRAM raytracing
 		!call polar_ratio(mode, f,k_1,r_1,LP,pratio,pratio_1)
 
 		
-		!adaptation du pas de temps		
+		! time step adaptation
 		!---------------------------------
 		where (mu_1 .ne. mu) 
 			dt_1 = dtinit*abs(dr(:)/(mu_1(:)-mu(:)))
@@ -267,7 +267,7 @@ PROGRAM raytracing
 		where (dt_1 < dtmin) 
 			dt_1 = dtmin
 		end where
-		!Conditions de sortie		
+		! exit conditions
 		!----------------------------------
 		kiter(numray) = kiter(numray) + 1.d0
 		
@@ -281,7 +281,7 @@ PROGRAM raytracing
 				write(*,*) flagmu, 'STOP MU'
 			endif
 	
-			!une coord. de r = NaN
+			!coord. of r = NaN
 			flagnan(:)=0
 			where (((r(1,:)+1)/(r(1,:)+1) .ne. 1) .or. ((r(2,:)+1)/(r(2,:)+1) .ne. 1) .or. ((r(3,:)+1.d0)/(r(3,:)+1.d0) .ne. 1))
 				kiter(numray) = Niter*1.d0
@@ -291,13 +291,13 @@ PROGRAM raytracing
 				write(*,*) flagnan, 'STOP NaN'
 			endif
 		
-			!erreur relative entre (n^2-1) et X(pY-1) > 1% => dt = dtmin
+			! relative error between (n^2-1) et X(pY-1) > 1% => dt = dtmin
 			flagerr(:)=0
 			call error(k_1,X,Y,mode,err)
 			where (err .gt. 1.d-2)  
 				dt_1(numray) = dtmin
 			end where
-			!erreur dispersion > 1% => dt = dtmin
+			! dispersion error > 1% => dt = dtmin
 			flagerrdisp(:)=0
 			call errordisp(k_1,r_1,X,Y,mu_1,errdisp)
 			where (errdisp .gt. 1.d-2)  
@@ -308,7 +308,7 @@ PROGRAM raytracing
 		
 			
 		
-		!Selection des param�tres des rayons qui continuent	
+		!Selection of the parameters of the continuing rays	
 		mask = kiter(numray) .lt. Niter
 		Nray3 = count(mask)
 
@@ -318,7 +318,7 @@ PROGRAM raytracing
 		j = 1
 		do i=1,Nray2
 			if (mask(i)) then
-				!�criture dans le fichier
+				! writing in file
 				write(21+numray(i),9991) r_1(:,i),k_1(:,i),mu_1(i),dt_1(i),&
 					& vg(i), vp(i), thkb(i)*180.d0/pi, thrb(i)*180.d0/pi,&
 					& dist(numray(i)), B(:,i), &
