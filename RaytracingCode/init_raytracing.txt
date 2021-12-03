@@ -1,20 +1,20 @@
-'TOY2' ! CHARACTER(len=4) :: nom du dossier des donnŽes et des sorties 
-'RK4F' ! CHARACTER(len=4) :: nom integrateur (RK4 / RK4F) 
-100.  ! REAL :: frequence (kHz) 
-3 ! INTEGER :: nombre de rayons 
-500000 ! INTEGER :: nombre d'iteration 
-cart ! CHARACTER(len=4) :: systme de coord. de la position initiale 
-km ! CHARACTER(len=2) :: unite de longueur utilise (M,KM,RS) 
-0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
-0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
-0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
-0.17, 0.000000, 0.98 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¡ 
-0.34, 0.000000, 0.94 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¡ 
-0.5, 0.000000, 0.87 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¡ 
-'X' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
-'X' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
-'X' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
-5.  ! REAL :: indice max 
-1.d-1 ! REAL :: dt initial 
-1.d-1 ! REAL :: dt max 
-1.d-1 ! REAL :: dt min
+'TOY2' ! CHARACTER(len=4) :: name of the output data folder 
+'RK4F' ! CHARACTER(len=4) :: integrator name (RK4 / RK4F) 
+100.  ! REAL :: frequency (kHz) 
+3 ! INTEGER :: number of rays
+500000 ! INTEGER :: maximal number of iteration s
+cart ! CHARACTER(len=4) :: coordinate system of the initial position
+km ! CHARACTER(len=2) :: length unit (M,KM,RS) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: initial position of the 1st ray (m) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: initial position of the 2nd ray (m) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: initial position of the 3rd ray (m) 
+0.17, 0.000000, 0.98 ! REAL, DIMENSION(3) :: initial (k,x)  angle
+0.34, 0.000000, 0.94 ! REAL, DIMENSION(3) :: initial (k,x)  angle
+0.5, 0.000000, 0.87 ! REAL, DIMENSION(3) :: initial (k,x)  angle
+'X' ! CHARACTER(len=1) :: propagation mode of the 1st ray ('X' ou 'O' ou 'V') 
+'X' ! CHARACTER(len=1) :: propagation mode of the 2nd ray ('X' ou 'O' ou 'V') 
+'X' ! CHARACTER(len=1) :: propagation mode of the 3rd ray ('X' ou 'O' ou 'V') 
+5.  ! REAL :: maximum refraction index value
+1.d-1 ! REAL :: initial time step 
+1.d-1 ! REAL :: maximum value of a time step
+1.d-1 ! REAL :: minimum value of a time step
