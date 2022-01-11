@@ -28,6 +28,7 @@ subroutine read_environ()
         !  dans un fichier
         !----------------------------------------------------
         use constantes
+        use netcdf
 
         open(40,file='init_environ.txt')
         read(40,*)n0
@@ -66,5 +67,20 @@ subroutine density(V,Ne)
 
 
 end subroutine density
+
+subroutine read_environ_netcdf()
+  use netcdf
+  integer(kind=4) :: ncid,stId,varid
+  real(kind=8)::dens(3)
+
+  stId = nf90_open("prod_jia_o2p_330.nc",nf90_nowrite,ncid)
+  stId = nf90_inq_varid(ncid,"Prod",varid)
+  stId = nf90_get_var(ncid,varid,dens)
+
+  write(*,*)"dens = ",dens
+
+  stId = nf90_close(ncid)
+end subroutine read_environ_netcdf
+
 
 END MODULE environ

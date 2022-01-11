@@ -32,6 +32,7 @@ PROGRAM raytracing
 
 
         call read_environ()
+        call read_environ_netcdf()
 ! INITIALISATION (file init_raytracing.txt')
 	open(21, file='init_raytracing.txt')
 	
