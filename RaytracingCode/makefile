@@ -34,7 +34,9 @@ moduleD: #*.a
 module: #*.a	
 
 	$(F90) -c $(OPT) constantes.f90
-	$(F90) -c $(OPT) coord.f90	
+	$(F90) -c $(OPT) coord.f90
+	$(F90) -c $(OPT) variables.f90
+	$(F90) -c $(OPT) defs_basic_cdf.f90 -I$(INC_CDF)
 	$(F90) -c $(OPT) environ.f90 -I$(INC_CDF)
 	$(F90) -c $(OPT) subs_raytracing.f90
 	$(F90) -c $(OPT) RungeKuttaFehlberg.f90
