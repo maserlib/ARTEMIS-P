@@ -19,9 +19,14 @@ subroutine magneticf(V,B)
   B(1,:)=0. 
   B(2,:)=0.
  ! B(3,:)=B0*(V(3,:)/z0B)**(-3)
- B(3,:)=sqrt(2.0)*79e-9 ! Tesla from lathys env_ganymede
+ B(3,:)=0. !sqrt(2.0)*79e-9 ! Tesla from lathys env_ganymede
 
 end subroutine magneticf
+
+subroutine read_magnetic_field_netcdf()
+
+
+end subroutine read_magnetic_field_netcdf
 
 
 subroutine read_environ()
@@ -50,7 +55,8 @@ subroutine density(V,Ne)
   !-----------------------------------------------------
   real(kind=8),dimension(:,:),intent(in)    :: V
   real(kind=8), dimension(:), intent(out)   :: Ne
-  real(kind=8) :: r(size(Ne)),th(size(Ne)),ph(size(Ne))
+  real(kind=8),dimension(:),allocatable :: r,th,ph
+  real(kind=8) :: y
   integer :: it,l,ii,jj,kk, N
 
 !  do ii=1,size_r
@@ -60,61 +66,66 @@ subroutine density(V,Ne)
 !      enddo
 !    end do
 !  enddo
-  Ne(:)=50.0!n0*(V(3,:)/z0)**(-2)
-write(*,*)"Neee",Ne  
+  !Ne(:)=50.0!n0*(V(3,:)/z0)**(-2)
   N = size(Ne)
-  r(:)  = sqrt(V(1,:)*V(1,:) + V(2,:)*V(2,:) + V(3,:)*V(3,:))
-  th(:) = acos(V(3,:)/r)
+  allocate(r(N),th(N),ph(N))
+  r(:)=0 ; th(:)=0 ; ph(:) = 0
 
-  do ii = 1,N
-    if(V(1,ii) .gt. 0)then
-      ph(:) = atan(V(2,:)/V(1,:))
-    else if (V(1,ii) .lt. 0) then 
-      ph(:) = atan(V(2,:)/V(1,:)) + pi
-    else
+
+!  do ii = 1,Ni
+  !  if(V(2,ii)<0)then 
+  !    y = 0
+  !  else 
+  !    y = V(2,ii)
+  !  endif
+  !i  if(V(1,ii) .gt. 0)then
+    where(V(1,:)==0)
       ph(:)=pi/2
-    endif
-  enddo
+    elsewhere
+      ph(:) = mod(atan(V(2,:)/V(1,:))+4*pi,2*pi)
+    end where
+  !  else if (V(1,ii) .lt. 0) then 
+  !    ph(:) = mod(atan(y/V(1,:)) + 5*pi,2*pi)
+  !  else
+  !    ph(:)=pi/2
+  !  endif
+ ! enddo
+  r(:)  = sqrt(V(1,:)*V(1,:) + V(2,:)*V(2,:) + V(3,:)*V(3,:))
+  th(:) = mod(acos(V(3,:)/r(:))+4*pi, 2*pi)
 
   write(*,*)"ici r_ ",r(:)
   write(*,*)"ici th ",th(:)
   write(*,*)"ici ph ",ph(:)
   do it=1,N
     ii=0; jj=0; kk=0
-    write(*,*)"it ",it
     do l=1,size_r
       if(r_low(l) <= r(it) .and. r(it) < r_upp(l))&
          ii = l
     enddo
-    write(*,*)"ii = ",ii
     if(ii==0) write(*,*)"ii=0",r_low(l),r(it),r_upp(l)
     do l=1,size_th
       if(th_low(l) <= th(it) .and. th(it) < th_upp(l))&
         jj = l
     enddo
-    write(*,*)"jj = ",jj
     if(jj==0) write(*,*)"jj=0",th_low(l),th(it),th_upp(l)
 
     do l=1,size_ph
       if(ph_low(l) <= ph(it) .and. ph(it) < ph_upp(l))&
          kk = l
     enddo
-    write(*,*)"kk = ",kk
     if(kk==0) write(*,*)"kk=0",ph_low(l),ph(it),ph_upp(l)
-    write(*,*)"test",ii,jj,kk
-    write(*,*)"Dn",Dn(ii,jj,kk)
-!    write(*,*)"Dn=",Dn(ii,jj,kk)
-!    Ne(it) = Dn(ii,jj,kk)
+    Ne(it) = Dn(ii,jj,kk)
    write(*,*)"Ne = ",Ne(it)
   enddo
 
+  deallocate(r,th,ph)
 
 end subroutine density
 
 subroutine read_environ_netcdf()
   use netcdf
   use defs_basic_cdf
-  integer(kind=4) :: ncid,stId,varid
+  integer(kind=4) :: ncid,stId
 !  real(kind=8),allocatable,dimension(:,:,:) ::dens
 !  real(kind=8),allocatable,dimension(:) :: r_low,r_upp,th_low,&
 !    th_upp,ph_low,ph_upp

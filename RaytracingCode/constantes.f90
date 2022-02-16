@@ -3,7 +3,7 @@ MODULE constantes
   implicit none
 
   real(kind=8), parameter :: pi = acos(-1.d0)
-  real(kind=8), parameter :: c = 	3.d8           !m/s
+  real(kind=8), parameter :: c = 3.d8           !m/s
   real(kind=8), parameter :: me = 9.10000d-31    !kg
   real(kind=8), parameter :: e  = -1.60000d-19   !C
   real(kind=8), parameter :: eps0 = 8.8542d-12   !F/m

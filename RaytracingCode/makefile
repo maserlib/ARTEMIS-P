@@ -1,7 +1,7 @@
 #Makefile
 
 F90 = gfortran
-OPT = -O2 -fimplicit-none -fdefault-integer-8 -fdefault-double-8 -fdefault-real-8
+OPT = -O2 -fimplicit-none -fdefault-integer-8 -fdefault-double-8 -fdefault-real-8 -g -Wall
 OPTD = -g -Wall -Wtabs -Wunderflow -fimplicit-none -Wconversion -fdefault-integer-8 -fdefault-real-8 -fdefault-double-8 -Wuninitialized -Wextra -Wredundant-decls
 #-O2 : compilation optimale
 #-g :debug
@@ -33,20 +33,20 @@ moduleD: #*.a
 
 module: #*.a	
 
-	$(F90) -c $(OPT) constantes.f90
-	$(F90) -c $(OPT) coord.f90
-	$(F90) -c $(OPT) variables.f90
-	$(F90) -c $(OPT) defs_basic_cdf.f90 -I$(INC_CDF)
-	$(F90) -c $(OPT) environ.f90 -I$(INC_CDF)
-	$(F90) -c $(OPT) subs_raytracing.f90
-	$(F90) -c $(OPT) RungeKuttaFehlberg.f90
-	$(F90) -c $(OPT) RungeKutta.f90
-	$(F90) -c $(OPT) params_raytracing.f90
+	$(F90) -c $(OPT) constantes.f90 
+	$(F90) -c $(OPT) coord.f90 
+	$(F90) -c $(OPT) variables.f90 
+	$(F90) -c $(OPT) defs_basic_cdf.f90 -I$(INC_CDF) 
+	$(F90) -c $(OPT) environ.f90 -I$(INC_CDF) 
+	$(F90) -c $(OPT) subs_raytracing.f90 
+	$(F90) -c $(OPT) RungeKuttaFehlberg.f90 
+	$(F90) -c $(OPT) RungeKutta.f90 
+	$(F90) -c $(OPT) params_raytracing.f90 
 
 	ar -r biblio.a *.o 
 
 program:
-	$(F90) -c $(OPT) raytracing_5.f90 -I$(INC_CDF)
+	$(F90) -c $(OPT) raytracing_5.f90 -I$(INC_CDF) 
 	$(F90) -o ARTEMIS-P raytracing_5.o biblio.a -I$(INC_CDF) -L$(LIB_CDF) -lnetcdf -lnetcdff
 #*.o 
 programD:
