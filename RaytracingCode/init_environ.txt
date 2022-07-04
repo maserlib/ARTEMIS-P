@@ -1,3 +1,4 @@
-115.				! REAL				:: n0 (cm-3)
-12800.			        ! REAL 				:: z0 (km)	!z0=2*Re dans le texte du ToyModel
-
+115.  ! REAL :: n0 (cm-3) 
+12800.  ! REAL :: z0 (km) !z0=2*Re dans le texte du ToyModel
+0.6e-4  ! REAL :: B0 (T) 
+6400 ! REAL :: z0B pour le champ magnetique
