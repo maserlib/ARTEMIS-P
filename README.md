@@ -32,7 +32,6 @@ You need to specify all the lines. You can find two simple examples on Toy1 and 
 
 ### _init_environ.txt_ :
 
-Test :
 * n0 in cm^-3 ; used in computation of Ne (see the routine _density_ in _environ.f90_).
 * z0 in km ; used in the computation of Ne (see the routine _density_ in _environ.f90_).
 * B0 in T ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
@@ -40,17 +39,17 @@ Test :
 
 ### _init_raytracing.txt_ :
 
-*<directory_name> : maximum length = 4.
-*<integrator_name> : choose between RK4 and RK4F.
-*frequency in kHz (real).
-*number of rays (integer).
-*number of iterations (integer).
-*coordinate system. Choose between cart or sphr.
-*length units. Choose between km, m or rs.
-*initial position of rays (x,y,z). Give the initial position of each ray on a different line.
-*k angle (kx, ky, kz). Give the initial position of each ray on a different line.
-*propagation mode. "X" for extraordinary mode or "O" for ordinary mode. Give the initial position of each ray on a different line.
-*maximum value of refractive index (integer).
-*initial time step (real).
-*maximum time step (real).
-*minimum time step (real).
+* <directory_name> : maximum length = 4.
+* <integrator_name> : choose between RK4 and RK4F.
+* frequency in kHz (real).
+* number of rays (integer).
+* number of iterations (integer).
+* coordinate system. Choose between cart or sphr.
+* length units. Choose between km, m or rs.
+* initial position of rays (x,y,z). Give the initial position of each ray on a different line.
+* k angle (kx, ky, kz). Give the initial position of each ray on a different line.
+* propagation mode. "X" for extraordinary mode or "O" for ordinary mode. Give the initial position of each ray on a different line.
+* maximum value of refractive index (integer).
+* initial time step (real).
+* maximum time step (real).
+* minimum time step (real).
