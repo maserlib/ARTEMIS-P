@@ -33,10 +33,10 @@ You need to specify all the lines. You can find two simple examples on Toy1 and 
 ### _init_environ.txt_ :
 
 Test :
-*n0 in cm^-3 ; used in computation of Ne (see the routine _density_ in _environ.f90_).
-*z0 in km ; used in the computation of Ne (see the routine _density_ in _environ.f90_).
-*B0 in T ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
-*z0B in km ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
+* n0 in cm^-3 ; used in computation of Ne (see the routine _density_ in _environ.f90_).
+* z0 in km ; used in the computation of Ne (see the routine _density_ in _environ.f90_).
+* B0 in T ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
+* z0B in km ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
 
 ### _init_raytracing.txt_ :
 
