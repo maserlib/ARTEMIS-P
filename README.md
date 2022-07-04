@@ -31,12 +31,14 @@ In addition, the format of the results will also be updated.
 You need to specify all the lines. You can find two simple examples on Toy1 and Toy2 branches.
 
 ### _init_environ.txt_ :
+
 *n0 in cm^-3 ; used in computation of Ne (see the routine _density_ in _environ.f90_).
 *z0 in km ; used in the computation of Ne (see the routine _density_ in _environ.f90_).
 *B0 in T ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
 *z0B in km ; used in computation of B (see the routine _magneticf_ in _environ.f90_).
 
 ### _init_raytracing.txt_ :
+
 *<directory_name> : maximum length = 4.
 *<integrator_name> : choose between RK4 and RK4F.
 *frequency in kHz (real).
