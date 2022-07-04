@@ -1,29 +1,29 @@
-'TOY1'				! CHARACTER(len=4)              :: nom du dossier des données et des sorties
-'RK4F'				! CHARACTER(len=4) 	    	:: nom integrateur (RK4 / RK4F)
-100.				! REAL				:: frequence (kHz)
-6				! INTEGER			:: nombre de rayons
-100000				! INTEGER			:: nombre d'iteration
-cart				! CHARACTER(len=4)		:: système de coord. de la position initiale
-km                              ! CHARACTER(len=2)              :: unite de longueur utilise (M,KM,RS)			
-0., 0., 13800.			! REAL, DIMENSION(3)		:: position initiale (m)
-0., 0., 13800.			! REAL, DIMENSION(3)		:: position initiale (m)
-0., 0., 13800.			! REAL, DIMENSION(3)		:: position initiale (m)
-0., 0., 13800.			! REAL, DIMENSION(3)		:: position initiale (m)
-0., 0., 13800.			! REAL, DIMENSION(3)		:: position initiale (m)
-0., 0., 13800.			! REAL, DIMENSION(3)		:: position initiale (m)
-0.64, 0.000000, -0.77	        ! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
-0.87, 0.000000, -0.50	        ! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
-0.98, 0.000000, -0.17	        ! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
-0.98, 0.000000, 0.17	        ! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
-0.87, 0.000000, 0.50	        ! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
-0.64, 0.000000, 0.77	        ! REAL, DIMENSION(3)		:: k initiale ici (k,x) = 0°
-'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
-'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
-'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
-'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
-'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
-'O'				! CHARACTER(len=1)		:: mode de propagation ('X' ou 'O' ou 'V')
-5.				! REAL				:: indice max
-1.d-1				! REAL				:: dt initial
-1.d-1				! REAL				:: dt max
-1.d-1				! REAL				:: dt min
+'TOY1_1M_it' ! CHARACTER(len=4) :: nom du dossier des donn≈Ωes et des sorties 
+'RK4F' ! CHARACTER(len=4) :: nom integrateur (RK4 / RK4F) 
+100.  ! REAL :: frequence (kHz) 
+6 ! INTEGER :: nombre de rayons 
+1000000 ! INTEGER :: nombre d'iteration 
+cart ! CHARACTER(len=4) :: systme de coord. de la position initiale 
+km ! CHARACTER(len=2) :: unite de longueur utilise (M,KM,RS) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m)
+0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
+0., 0., 13800.  ! REAL, DIMENSION(3) :: position initiale (m) 
+0.64, 0.000000, -0.77 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¬° 
+0.87, 0.000000, -0.50 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¬° 
+0.98, 0.000000, -0.17 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¬° 
+0.98, 0.000000, 0.17 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¬° 
+0.87, 0.000000, 0.50 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¬° 
+0.64, 0.000000, 0.77 ! REAL, DIMENSION(3) :: k initiale ici (k,x) = 0¬° 
+'O' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
+'O' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
+'O' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
+'O' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
+'O' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
+'O' ! CHARACTER(len=1) :: mode de propagation ('X' ou 'O' ou 'V') 
+5.  ! REAL :: indice max 
+1.d-1 ! REAL :: dt initial 
+1.d-1 ! REAL :: dt max 
+1.d-1 ! REAL :: dt min
