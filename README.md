@@ -47,9 +47,34 @@ You need to specify all the lines. You can find two simple examples on Toy1 and 
 * coordinate system. Choose between cart or sphr.
 * length units. Choose between km, m or rs.
 * initial position of rays (x,y,z). Give the initial position of each ray on a different line.
-* k angle (kx, ky, kz). Give the initial position of each ray on a different line.
+* wave vector k (kx, ky, kz). Give the initial position of each ray on a different line.
 * propagation mode. "X" for extraordinary mode or "O" for ordinary mode. Give the initial position of each ray on a different line.
 * maximum value of refractive index (integer).
 * initial time step (real).
 * maximum time step (real).
 * minimum time step (real).
+
+## Description of result files
+
+For the moment the results are written in a .dat file as columns. There is one file per ray which are written in the folder specified in init_raytracing.txt. Each line corresponds to a time step except the first one which is the header.
+
+Here is the list of saved parameters :
+* position (x, y, z) in cartesian coordinates
+* wave vector (kx, ky, kz) in cartesian coordinates
+* refractive index
+* time step
+* group velocity
+* phase velocity
+* (k, B) angle in degree
+* (r, B) angle in degree (cannot be calculated during the first iteration)
+* covered distance
+* magnetic field (Bx, By, Bz) in Tesla
+* plasma frequency in Hz
+* cyclotron frequency in Hz
+* upper hybrid frequency
+* electron density in cm^-3
+* polarization ratios of Ey/Ex, Ez/Ex and Ez/Ey
+* propagation mode (ordinary or extra-ordinary)
+* limiting polarisation vector ('VP' -> polar variable, 'LP' -> limiting polar)
+* relative error between two time step
+* dispersion error
