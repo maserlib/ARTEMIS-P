@@ -7,6 +7,7 @@ PROGRAM raytracing
   use RungeKuttaFehlberg
   use RungeKutta
   use params_raytracing
+  use variables
   
   implicit none
   
@@ -19,7 +20,7 @@ PROGRAM raytracing
   real(kind=8), dimension(:), allocatable       :: vg, dist, fp, fc, fuh, Nel, normB, mux, muo, dmux, dmuo, mux_1, muo_1
   integer(kind=8),dimension(:),allocatable     :: numray, numraytemp, flagmu, flagnan,flagerr, flagerrdisp
   real(kind=8)                                 :: f,t1,t2, mumax, dtinit,dtmax,dtmin
-  integer(kind=8)                               :: Nray,Nray2,Nray3 ,i ,j
+  integer(kind=8)                               :: Nray2,Nray3 ,i ,j
   character(len=1), dimension(:), allocatable  :: mode, mode_1, modeX, modeO
   character(len=2), dimension(:), allocatable  :: LP
   character(len=4)                             :: integ, path, sysco
@@ -31,8 +32,9 @@ PROGRAM raytracing
   call cpu_time(t1)
 
 
-        call read_environ()
-        call read_environ_netcdf()
+  call read_environ()
+  call read_environ_netcdf()
+  call read_magnetic_field_netcdf()
 ! INITIALISATION (file init_raytracing.txt')
   open(21, file='init_raytracing.txt')
   
@@ -42,17 +44,17 @@ PROGRAM raytracing
   write(*,*) '----------------------------------'
   !FICHIER ECRITURE TEST
   !ecriture fichier
-    inquire(file=trim('../'//path), exist=is_existing) !SYNTAXE POUR GFORTRAN
+    inquire(file=trim('./'//path), exist=is_existing) !SYNTAXE POUR GFORTRAN
     !inquire(directory=trim('../'//path), exist=is_existing) !SYNTAXE POUR IFORT
   if (.not.is_existing) then
     write(*,*) is_existing, 'file don t exist'
-    call system("mkdir "//'../'//path)
-    open(19,file='../'//path//'/test_limitingpolar.txt')
+    call system("mkdir "//'./'//path)
+    open(19,file='./'//path//'/test_limitingpolar.txt')
   else
     write(*,'(a,$)') 'folder already exists. Erase?  (Y/N)'
     read(*,*) erase
     if (erase == 'Y') then 
-      open(19,file='../'//path//'/test_limitingpolar.txt')
+      open(19,file='./'//path//'/test_limitingpolar.txt')
     else if (erase == 'N') then
       stop 'STOP folder already exists'
     else
@@ -181,7 +183,7 @@ PROGRAM raytracing
   call polar_ratio(mode, f,k,r,LP,pratio,pratio_1)
   
   !WRITING IN VISU FILE
-  open(18, file='../'//path//'/visu_param.txt')
+  open(18, file='./'//path//'/visu_param.txt')
     write(18,"(A4)") path
     write(18,"(I3.1)") Nray
     write(18,"(A4)") integ
@@ -196,9 +198,9 @@ PROGRAM raytracing
   !SAVE INITIAL PARAMETERS
   
   if (integ .eq. 'RK4T') then
-    filen='../'//path//'/dataRK4T_' 
+    filen='./'//path//'/dataRK4T_' 
   else 
-    filen='../'//path//'/dataRK4F_'
+    filen='./'//path//'/dataRK4F_'
   end if
     
   do i=1,nray
@@ -223,13 +225,16 @@ PROGRAM raytracing
   !LOOP
 
   do while (sum(kiter) .ne. Nray*Niter*1.d0)
+    write(*,*)"WESH 00",r,r_1,dr
     if (integ .eq. 'RK4T') then
       call RK4(r,k,dt,dxdt,dkdt,f,mode,r_1,k_1)
     else
       call RK4F(r,k,dt,dxdt,dkdt,f,mode,dtmin,dtmax,r_1,k_1)
     end if
 
+    write(*,*)"WESH 01",r,r_1,dr
     call varplasma(r_1,f,X,Y)
+    write(*,*)"WESH 02",r,r_1,dr
     call index(X,Y,k_1,mode,mu_1)
     !renormalisation of k by mu
     normk = sqrt(k_1(1,:)**2+k_1(2,:)**2+k_1(3,:)**2)
@@ -238,6 +243,7 @@ PROGRAM raytracing
     ! dr=sqrt(r_1^2-r^2)
     dr(:)=sqrt(r_1(1,:)**2+r_1(2,:)**2+r_1(3,:)**2)-sqrt(r(1,:)**2+r(2,:)**2+r(3,:)**2)
     
+    write(*,*)"WESH 03",r,r_1,dr
     !Compute parameters
     call density(r_1,Nel)
     call vphase(mu_1,vp)
@@ -316,7 +322,9 @@ PROGRAM raytracing
 
     deallocate (r,k,dt,mu,numraytemp, mode, mux, muo,pratio)
     allocate (r(3,Nray3), k(3,Nray3),dt(Nray3),mu(Nray3),numraytemp(Nray3), mode(Nray3), mux(Nray3), muo(Nray3),pratio(3,Nray3))
+    r=0 ; k=0 ; dt=0 ; mu=0 ; numraytemp=0 ; mode='' ; mux=0 ; muo=0 ; pratio=0
 
+    write(*,*)"WESH 04",r,r_1,dr
     j = 1
     do i=1,Nray2
       if (mask(i)) then
@@ -344,6 +352,7 @@ PROGRAM raytracing
       end if
     end do
 
+    write(*,*)"WESH 05",r,r_1,dr
     9991 format(26(1e17.10,1x),A1,1x,A2,1x,1e17.10,1x,1e17.10)
 
     deallocate(numray)
@@ -358,7 +367,11 @@ PROGRAM raytracing
     allocate(thkb(Nray3),thkr(Nray3),thrb(Nray3),mask(Nray3), flagmu(Nray3), flagnan(Nray3),flagerr(Nray3),flagerrdisp(Nray3))
     allocate(fp(Nray3), fc(Nray3),fuh(Nray3), Nel(Nray3), mode_1(Nray3), mux_1(Nray3), muo_1(Nray3), dmux(Nray3),dmuo(Nray3))
     allocate(modeX(Nray3),modeO(Nray3), dr(Nray3))
-                LP(:)='VP'
+    r_1=0; k_1=0; Y=0; B=0; pratio_1=0
+    dt_1=0; mu_1=0; X=0; normk=0; err=0; errdisp=0; vp=0; vg=0; LP(:)='VP'
+    thkb=0; thkr=0; thrb=0; mask=0; flagmu=0; flagnan=0; flagerr=0; flagerrdisp=0
+    fp=0; fc=0; fuh=0; Nel=0; mode_1=''; mux_1=0; muo_1=0; dmux=0; dmuo=0
+    modeX=''; modeO=''; dr=0
   end do
   
   call cpu_time(t2)
