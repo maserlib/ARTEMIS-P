@@ -20,7 +20,7 @@ subroutine varplasma(V,f,X,Y)
   real(kind=8), intent(in)                  :: f 
   real(kind=8), dimension(:), intent(out)   :: X 
   real(kind=8), dimension(:,:), intent(out) :: Y 
-  real(kind=8), dimension(3,size(x))        :: B 
+  real(kind=8), dimension(3,size(X))        :: B 
   real(kind=8), dimension(size(X))          :: Ne, fp
     
   call density(V,Ne)
@@ -55,14 +55,17 @@ subroutine index(X,Y,k,mode,mu)
   else where
     nmode = 1.d0
   end where
-  
+! write(*,*)"index 00 ",Y,k,mu 
   normY = sqrt(Y(1,:)**2+Y(2,:)**2+Y(3,:)**2)
   normk = sqrt(k(1,:)**2+k(2,:)**2+k(3,:)**2)
+! write(*,*)"index 01 ",Y,k,mu,normY,normk
   where (normY .eq.0.d0)
     vdotk(:) = maxval(k(:,:))
   elsewhere
     vdotk(:) = (Y(1,:)*k(1,:)+Y(2,:)*k(2,:)+Y(3,:)*k(3,:))/normY(:)
   end where
+
+! write(*,*)"index 02 ",X,Y,k,mu,vdotk
   
   A = 1.d0-X-normY**2*(1.d0-X*vdotk**2/normk**2)
   B = 0.5d0*(-2.d0*(1.d0-X)*(1.d0-X-normY**2)+X*normY**2*(1.d0-vdotk**2/normk**2))
@@ -70,13 +73,17 @@ subroutine index(X,Y,k,mode,mu)
   
   B2mAC = B**2-A*C
   
+! write(*,*)"index 03 ",X,Y,k,mu,A,B,C,B2mAC
   ! When magnetic field -> 0 then B2mAC -> 0 => NUMERICAL EFFECTS => when abs(B2mAC) < 1.d-15 => B2mAC=0
-  where (abs(B2mAC) < 1.d-15)
+  !where (abs(B2mAC) < 1.d-15)
+  where (B2mAC < 1.d-15)
     B2mAC = 0.d0
   end where
   
+! write(*,*)"index 04 ",Y,k,mu,A,B,C,B2mAC
   mu = sqrt((-B+nmode*sqrt(B2mAC))/A)
   
+! write(*,*)"index 05 ",Y,k,mu
   
   !write(*,*) B2mAC, -B+sqrt(B2mAC), mu
   
@@ -96,8 +103,9 @@ subroutine calcp(X,Y,k,mode,p)
   real(kind=8), dimension(:), intent(in)     :: X
   character(len=1), intent(in), dimension(:) :: mode
   real(kind=8), dimension(:), intent(out)    :: p
-  real(kind=8), dimension(size(p))           :: normY, vdotk,alpha,beta,gamma,nmode
-  
+!  real(kind=8), dimension(size(p))           :: normY, vdotk,alpha,beta,gamma,nmode
+  real(kind=8), dimension(nray)           :: normY, vdotk,alpha,beta,gamma,nmode
+
   !------------------------------------------
   !mode O +/- mode X
   !p = (-beta +/- sqrt(beta**2-alpha*gamma))/alpha
@@ -161,6 +169,7 @@ subroutine varpartiel(X,Y,k,mode,A,B,C,D)
     vdotk(:) = (Y(1,:)*k(1,:)+Y(2,:)*k(2,:)+Y(3,:)*k(3,:))/normY(:)
   end where
 
+! write(*,*)"nray ",nray 
   call calcp(X,Y,k,mode,p)
 
   A = nmode*4.d0*sqrt((normY*(1.d0+(vdotk)**2)/2.)**2-(1.d0-X-normY**2)*(-(vdotk)**2))

@@ -18,9 +18,16 @@ subroutine thetakB(k,V,thkB)
   !-----------------------------------------------------
   real(kind=8), dimension(:,:),intent(in) :: k,V
   real(kind=8), dimension(:),intent(out)  :: thkB
-  real(kind=8), dimension(3,size(thkb))   :: B
-  real(kind=8),dimension(size(thkb))      :: normB,normk
-    
+  !real(kind=8), dimension(3,size(thkb))   :: B
+  real(kind=8),allocatable, dimension(:,:)   :: B
+  !real(kind=8),dimension(size(thkb))      :: normB,normk
+  real(kind=8),allocatable,dimension(:)      :: normB,normk
+  integer :: i
+  !do i=1,100
+  ! write(*,*)"SIZE",size(thkb),size(V),size(k) 
+  ! enddo
+  allocate(B(3,size(thkb)),normB(size(thkb)),normk(size(thkb)))
+  !allocate(B(3,77),normB(77),normk(77))
   call magneticf(V,B)
   normB=sqrt(B(1,:)**2+B(2,:)**2+B(3,:)**2)
   normk=sqrt(k(1,:)**2+k(2,:)**2+k(3,:)**2)
@@ -30,6 +37,8 @@ subroutine thetakB(k,V,thkB)
   elsewhere
     thkB=0.d0
   end where
+
+  deallocate(B,normB,normk)
   
 end subroutine thetakB
 

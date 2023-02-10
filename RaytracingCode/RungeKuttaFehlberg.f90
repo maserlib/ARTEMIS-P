@@ -96,7 +96,6 @@ MODULE RungeKuttaFehlberg
   dy = a1*dy1+a2*dy3+a3*dy4+a4*dy5+a5*dy6
   err1x = abs(dx(1,:)) ; err2x = abs(dx(2,:)) ; err3x = abs(dx(3,:))
   err1y = abs(dy(1,:)) ; err2y = abs(dy(2,:)) ; err3y = abs(dy(3,:))
-
   if (maxval([err1x,err2x,err3x,err1y,err2y,err3y]) > tol .and. minval(dt) > dtmin) then
     again = 1
     write(*,*)'------------------------------------'
