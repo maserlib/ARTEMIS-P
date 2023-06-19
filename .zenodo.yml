@@ -1,0 +1,37 @@
+{
+    "creators": [
+        {
+            "affiliation": "LESIA, Observatoire de Paris-PSL, CNRS, SU, UPC",
+            "name": "Gautier, Anne-Lise"
+        },
+        {
+            "orcid": "0000-0001-8277-9561",
+            "affiliation": "LATMOS, UVSQ, CNRS / LESIA, Observatoire de Paris-PSL, CNRS / CNES",
+            "name": "Baskevtich, Claire A."
+        },
+        {
+            "orcid": "0000-0001-7915-5571",
+            "affiliation": "LESIA, Observatoire de Paris-PSL, CNRS, SU, UPC",
+            "name": "Cecconi, Baptiste"
+        }
+    ],
+
+    "license": "MIT",
+
+    "title": "maserlib/ARTEMIS-P",
+
+    "keywords": ["Radio Emissions", "Simulations", "Planetary", "Ray Tracing"],
+
+    "related_identifiers": [
+        {
+            "scheme": "URL",
+            "identifier": "https://theses.hal.science/tel-01145651v2",
+            "relation": "documents",
+        }
+    ],
+    "communities": [
+        {"identifier": "Europlanet-VESPA"},
+        {"identifier": "Space Physics and Aeronomy"}
+    ],
+    "grants": [{"id":"871149"}]
+}
