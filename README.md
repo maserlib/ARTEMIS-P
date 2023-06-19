@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8055943.svg)](https://doi.org/10.5281/zenodo.8055943)
+
+
 # ARTEMIS-P
 Anisotropic Ray Tracer for Electromagnetism in Magnetospheres, Ionospheres and Solar wind, including Polarisation
 
